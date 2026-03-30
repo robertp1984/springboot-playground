@@ -1,0 +1,22 @@
+{
+  "name": "opensearch-stickynotecategorized-sink",
+  "config": {
+    "connector.class": "io.aiven.kafka.connect.opensearch.OpensearchSinkConnector",
+    "topics": "playground.stickynote.categorized",
+
+    "connection.url": "https://opensearch1:9200",
+    "connection.username": "admin",
+    "connection.password": "osPass@28g",
+    "type.name": "stickynotecategorized",
+
+    "tasks.max": "1",
+
+    "key.ignore": "false",
+
+    "key.converter": "org.apache.kafka.connect.converters.LongConverter",
+    "key.converter.schemas.enable": "false",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "false",
+    "schema.ignore": "true"
+  }
+}

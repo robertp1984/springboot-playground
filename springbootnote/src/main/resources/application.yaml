@@ -1,0 +1,48 @@
+spring:
+  application:
+    name: springboot-note
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+        aop: DEBUG
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, beans, env
+  endpoint:
+    health:
+      show-details: always
+  info:
+    java:
+      enabled: true
+    env:
+      enabled: true
+
+
+info:
+  app:
+    name: @project.name@
+    version: @project.version@
+    description: @project.description@
+
+app:
+  methodCallTiming:
+    enabled: true
+    threshold: 5
+  kafka:
+    enabled: true
+    bootstrap-servers: localhost:29092
+    stickynote-topic: playground.stickynote

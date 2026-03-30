@@ -1,0 +1,57 @@
+[
+  {
+    "title": "Git push",
+    "body": "Call 'git push origin' to send your changes to repository referred to by origin.",
+    "type": "PLAIN_TEXT",
+    "stickyNoteLinks": [
+      {
+        "link": "http://git-scm.org/docs/git-push"
+      }
+    ],
+    "created": "2026-01-25T12:00:00"
+  },
+  {
+    "title": "Git pull",
+    "body": "Call 'git pull' to fetch latest changes from the repository referred to by origin.",
+    "type": "PLAIN_TEXT",
+    "stickyNoteLinks": [
+      {
+        "link": "http://git-scm.org/docs/git-push"
+      }
+    ],
+    "created": "2026-01-25T12:00:00"
+  },
+  {
+    "title": "Create Kafka topic",
+    "body": "kafka-topics.sh --create --topic quickstart-events --bootstrap-server localhost:9092 --partitions 3 --replication-factor 2",
+    "type": "PLAIN_TEXT",
+    "stickyNoteLinks": [
+      {
+        "link": "https://kafka.apache.org/"
+      }
+    ],
+    "created": "2026-01-25T12:00:00"
+  },
+  {
+    "title": "Describe Kafka topic",
+    "body": "kafka-topics.sh --describe --topic quickstart-events --bootstrap-server localhost:9092",
+    "type": "PLAIN_TEXT",
+    "stickyNoteLinks": [
+      {
+        "link": "https://kafka.apache.org/"
+      }
+    ],
+    "created": "2026-01-25T12:00:00"
+  },
+  {
+    "title": "Initialize Spring Boot project in seconds",
+    "body": "Just go to https://start.spring.io/ and select the dependencies you need. You can download the Spring Boot project as a zip file and import it in your favourite IDE.",
+    "type": "PLAIN_TEXT",
+    "stickyNoteLinks": [
+      {
+        "link": "https://start.spring.io/"
+      }
+    ],
+    "created": "2026-03-11T10:00:00"
+  }
+]

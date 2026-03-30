@@ -1,0 +1,83 @@
+[
+  {
+    "category": "JAVA",
+    "keywords": [
+      { "keyword": "Java", "weight": 0.9, "matchType": "SHOULD" },
+      { "keyword": "JVM", "weight": 0.8, "matchType": "SHOULD" },
+      { "keyword": "Garbage Collection", "weight": 0.7, "matchType": "SHOULD" },
+      { "keyword": "Multithreading", "weight": 0.6, "matchType": "MAY" },
+      { "keyword": "Streams", "weight": 0.5, "matchType": "MAY" }
+    ]
+  },
+  {
+    "category": "JPA",
+    "keywords": [
+      { "keyword": "JPA", "weight": 0.9, "matchType": "SHOULD" },
+      { "keyword": "Hibernate", "weight": 0.9, "matchType": "SHOULD" },
+      { "keyword": "Entity", "weight": 0.8, "matchType": "SHOULD" },
+      { "keyword": "Repository", "weight": 0.2, "matchType": "MAY" },
+      { "keyword": "Query", "weight": 0.4, "matchType": "MAY" },
+      { "keyword": "Optimistic", "weight": 0.1, "matchType": "MAY" },
+      { "keyword": "Pessimistic", "weight": 0.1, "matchType": "MAY" }
+    ]
+  },
+  {
+    "category": "SPRING",
+    "keywords": [
+      { "keyword": "Spring", "weight": 0.9, "matchType": "SHOULD" },
+      { "keyword": "Boot", "weight": 0.4, "matchType": "SHOULD" },
+      { "keyword": "Dependency Injection", "weight": 0.1, "matchType": "MAY" },
+      { "keyword": "AOP", "weight": 0.1, "matchType": "MAY" },
+      { "keyword": "MVC", "weight": 0.1, "matchType": "MAY" },
+      { "keyword": "Data", "weight": 0.1, "matchType": "MAY" },
+      { "keyword": "Security", "weight": 0.1, "matchType": "MAY" }
+    ]
+  },
+  {
+    "category": "KAFKA",
+    "keywords": [
+      { "keyword": "Kafka", "weight": 0.9, "matchType": "SHOULD" },
+      { "keyword": "Confluent", "weight": 0.2, "matchType": "MAY" },
+      { "keyword": "Stream", "weight": 0.1, "matchType": "MAY" },
+      { "keyword": "Connect", "weight": 0.1, "matchType": "MAY" },
+      { "keyword": "Producer", "weight": 0.1, "matchType": "MAY" },
+      { "keyword": "Consumer", "weight": 0.1,"matchType": "MAY" },
+      { "keyword": "Topic", "weight": 0.1, "matchType": "MAY" },
+      { "keyword": "Partition", "weight": 0.1,"matchType": "MAY" }
+    ]
+  },
+  {
+    "category": "GIT",
+    "keywords": [
+      { "keyword": "Git", "weight": 0.9, "matchType": "SHOULD" },
+      { "keyword": "SCM", "weight": 0.9, "matchType": "SHOULD" },
+      { "keyword": "Repository", "weight": 0.3, "matchType": "MAY" },
+      { "keyword": "pull", "weight": 0.1, "matchType": "MAY" },
+      { "keyword": "push", "weight": 0.1, "matchType": "MAY" }
+    ]
+  },
+  {
+    "category": "DOCKER",
+    "keywords": [
+      { "keyword": "Docker", "weight": 0.9, "matchType": "SHOULD" },
+      { "keyword": "Container", "weight": 0.8, "matchType": "SHOULD" },
+      { "keyword": "Image", "weight": 0.7, "matchType": "SHOULD" },
+      { "keyword": "Kubernetes", "weight": 0.1, "matchType": "MAY" },
+      { "keyword": "Swarm", "weight": 0.1, "matchType": "MAY" },
+      { "keyword": "Compose", "weight": 0.1, "matchType": "MAY" }
+      ]
+  },
+  {
+    "category": "CLOUD",
+    "keywords": [
+      { "keyword": "Cloud", "weight": 0.9, "matchType": "SHOULD" },
+      { "keyword": "AWS", "weight": 0.8, "matchType": "SHOULD" },
+      { "keyword": "Azure", "weight": 0.7, "matchType": "SHOULD" },
+      { "keyword": "GCP", "weight": 0.6, "matchType": "SHOULD" },
+      { "keyword": "Serverless", "weight": 0.1, "matchType": "MAY" },
+      { "keyword": "Lambda", "weight": 0.1, "matchType": "MAY" },
+      { "keyword": "EC2", "weight": 0.1, "matchType": "MAY" },
+      { "keyword": "S3", "weight": 0.1, "matchType": "MAY" }
+    ]
+  }
+]

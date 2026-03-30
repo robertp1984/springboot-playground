@@ -1,0 +1,14 @@
+{
+  "name": "mongodb-stickynote-sink1",
+  "config": {
+    "connector.class": "com.mongodb.kafka.connect.MongoSinkConnector",
+    "topics": "playground.stickynote",
+    "connection.uri": "mongodb://root:password@mongo:27017",
+    "key.converter": "org.apache.kafka.connect.converters.LongConverter",
+    "key.converter.schemas.enable": false,
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": false,
+    "database": "playground",
+    "collection": "stickynote"
+  }
+}

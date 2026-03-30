@@ -1,0 +1,79 @@
+package org.softwarecave.springbootnote.note.service;
+
+import lombok.extern.slf4j.Slf4j;
+import org.softwarecave.springbootnote.note.model.NoSuchStickyNoteException;
+import org.softwarecave.springbootnote.note.model.StickyNote;
+import org.softwarecave.springbootnote.notification.ActionType;
+import org.softwarecave.springbootnote.notification.ModelType;
+import org.softwarecave.springbootnote.notification.Recordable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collection;
+import java.util.Optional;
+
+@Service
+@Transactional
+@Slf4j
+public class StickyNoteServiceImpl implements StickyNoteService {
+
+    private final StickyNoteRepository stickyNoteRepository;
+
+    public StickyNoteServiceImpl(StickyNoteRepository stickyNoteRepository) {
+        this.stickyNoteRepository = stickyNoteRepository;
+    }
+
+    @Override
+    public Collection<StickyNote> getStickyNotes() {
+        return stickyNoteRepository.findAll();
+    }
+
+    @Override
+    public StickyNote getStickyNoteById(Long stickyNoteId) throws NoSuchStickyNoteException {
+        if (stickyNoteId == null) {
+            throw new NoSuchStickyNoteException("No sticky note id provided");
+        }
+        Optional<StickyNote> stickyNote = stickyNoteRepository.findById(stickyNoteId);
+        return stickyNote.orElseThrow(() -> new NoSuchStickyNoteException("No sticky note found for ID " + stickyNoteId));
+    }
+
+    @Override
+    @Recordable(modelType = ModelType.STICKY_NOTE, actionType = ActionType.ADD)
+    public StickyNote addStickyNote(StickyNote stickyNote) {
+        if (stickyNote.getId() != null) {
+            throw new IllegalArgumentException("Sticky note id already exists");
+        }
+        boolean linkHasId = stickyNote.getLinks() != null
+                && stickyNote.getLinks()
+                .stream()
+                .anyMatch(stickyNoteLink -> stickyNoteLink.getId() != null);
+        if (linkHasId) {
+            throw new IllegalArgumentException("Sticky note link id already exists");
+        }
+        return stickyNoteRepository.save(stickyNote);
+    }
+
+    @Override
+    @Recordable(modelType = ModelType.STICKY_NOTE, actionType = ActionType.UPDATE)
+    public StickyNote updateStickyNote(StickyNote stickyNote) {
+        if (stickyNoteRepository.existsById(stickyNote.getId())) {
+            return stickyNoteRepository.save(stickyNote);
+        } else {
+            throw new NoSuchStickyNoteException("No sticky note found for ID " + stickyNote.getId());
+        }
+    }
+
+    @Override
+    @Recordable(modelType = ModelType.STICKY_NOTE, actionType = ActionType.DELETE)
+    public void deleteStickyNote(Long stickyNoteId) {
+        if (stickyNoteId == null) {
+            throw new NoSuchStickyNoteException("No sticky note id provided");
+        }
+        if (stickyNoteRepository.existsById(stickyNoteId)) {
+            stickyNoteRepository.deleteById(stickyNoteId);
+        } else {
+            throw new NoSuchStickyNoteException("No sticky note found for ID " + stickyNoteId);
+        }
+    }
+
+}
