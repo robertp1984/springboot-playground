@@ -2,7 +2,7 @@
   "name": "opensearch-stickynote-sink",
   "config": {
     "connector.class": "io.aiven.kafka.connect.opensearch.OpensearchSinkConnector",
-    "topics": "playground.stickynote",
+    "topics": "playground.stickynote.json",
 
     "connection.url": "https://opensearch1:9200",
     "connection.username": "admin",

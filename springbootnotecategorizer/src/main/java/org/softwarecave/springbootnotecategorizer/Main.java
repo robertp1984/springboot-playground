@@ -7,8 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 public class Main {
 
     public static final String BOOTSTRAP_SERVERS = "localhost:29092";
-    public static final String INPUT_TOPIC = "playground.stickynote";
-    public static final String OUTPUT_TOPIC = "playground.stickynote.categorized";
+    public static final String INPUT_TOPIC = "playground.stickynote.json";
+    public static final String OUTPUT_TOPIC = "playground.stickynote.json.categorized";
 
     public static void main(String[] args) throws InterruptedException {
         ParsedArgs parsedArgs = parseArgs(args);

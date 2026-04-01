@@ -43,6 +43,10 @@ app:
     enabled: true
     threshold: 5
   kafka:
-    enabled: true
     bootstrap-servers: localhost:29092
-    stickynote-topic: playground.stickynote
+    json:
+      enabled: true
+      stickynote-topic-json: playground.stickynote.json
+    avro:
+      enabled: true
+      stickynote-topic-avro: playground.stickynote.avro

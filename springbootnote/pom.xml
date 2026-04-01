@@ -13,23 +13,18 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>springboot-note</name>
     <description>SpringBoot Note application to test various technologies</description>
-    <url/>
-    <licenses>
-        <license/>
-    </licenses>
+
     <developers>
-        <developer/>
+        <developer>
+            <name>Robert Piasecki</name>
+        </developer>
     </developers>
-    <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
-    </scm>
+
     <properties>
         <java.version>25</java.version>
         <flyway.version>11.20.3</flyway.version>
         <kafka.version>4.2.0</kafka.version>
+        <avro.version>1.12.1</avro.version>
     </properties>
     <dependencies>
         <dependency>
@@ -138,6 +133,12 @@
             <artifactId>kafka-clients</artifactId>
             <version>${kafka.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro</artifactId>
+            <version>${avro.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -169,6 +170,28 @@
                     <execution>
                         <goals>
                             <goal>build-info</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.avro</groupId>
+                <artifactId>avro-maven-plugin</artifactId>
+                <version>${avro.version}</version>
+                <configuration>
+                    <sourceDirectory>${project.basedir}/src/main/resources/avro</sourceDirectory>
+                    <stringType>String</stringType>
+                    <createSetters>false</createSetters>
+                    <enableDecimalLogicalType>true</enableDecimalLogicalType>
+                    <fieldVisibility>private</fieldVisibility>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>schema</goal>
+                            <goal>protocol</goal>
+                            <goal>idl-protocol</goal>
                         </goals>
                     </execution>
                 </executions>

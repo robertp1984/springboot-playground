@@ -1,5 +1,6 @@
 package org.softwarecave.springbootnotecategorizer.categorizer.aibasedcategorizer;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.softwarecave.springbootnotecategorizer.categorizer.Categorizer;
@@ -16,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Due to the nature of the AI the results are not deterministic and the results may vary between executions.
  * Therefore, the assertion rules are more relaxed and the test may fail from time to time.
  */
-public class BedrockBasedCategorizerTest {
+public class BedrockBasedCategorizerIntegrationTest {
     @ParameterizedTest
     @CsvSource(value = {
             "Pushing to Git repository, Use git push to upload your local repository content to a remote., GIT",
@@ -25,6 +26,7 @@ public class BedrockBasedCategorizerTest {
             "Using Spring Data JPA, Use Spring Data JPA to simplify database access in your Spring application., SPRING|JPA",
             "Dockerizing a Spring Boot application, Use Docker to containerize your Spring Boot application., SPRING|DOCKER"
     })
+    @Disabled("Temporarily disabled not to incur large costs in AWS")
     public void testCategorizeParams(String title, String body, String expectedCategoriesString) {
         Categorizer categorizer = new CategorizerFactory().getBedrockBasedCategorizer();
         CategorizerResults categories = categorizer.categorize(title, body);

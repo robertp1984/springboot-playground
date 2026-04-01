@@ -1,0 +1,35 @@
+{
+  "namespace": "org.softwarecave.springbootnote.avro",
+  "type": "record",
+  "name": "StickyNote",
+  "fields": [
+    {
+      "name": "id",
+      "type": "long"
+    },
+    {
+      "name": "title",
+      "type": "string"
+    },
+    {
+      "name": "body",
+      "type": "string"
+    },
+    {
+      "name": "type",
+      "type": "string"
+    },
+    {
+      "name": "links",
+      "type": {
+        "type": "array",
+        "items": "org.softwarecave.springbootnote.avro.StickyNoteLink"
+      }
+    },
+    {
+      "name": "created",
+      "type": "long",
+      "logicalType": "timestamp-millis"
+    }
+  ]
+}

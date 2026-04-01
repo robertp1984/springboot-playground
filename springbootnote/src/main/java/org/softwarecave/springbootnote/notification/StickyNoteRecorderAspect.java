@@ -9,12 +9,14 @@ import org.softwarecave.springbootnote.notification.kafka.KafkaStickyNoteProduce
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @Aspect
 @Slf4j
 public class StickyNoteRecorderAspect {
 
-    private KafkaStickyNoteProducer kafkaStickyNoteProducer;
+    private List<KafkaStickyNoteProducer> kafkaStickyNoteProducers;
 
     @AfterReturning(pointcut = "@annotation(rec)",
             returning = "returnValue")
@@ -30,15 +32,15 @@ public class StickyNoteRecorderAspect {
         }
 
 
-        if (kafkaStickyNoteProducer != null) {
-            kafkaStickyNoteProducer.sendToKafka((StickyNote) returnValue);
+        if (kafkaStickyNoteProducers != null && !kafkaStickyNoteProducers.isEmpty()) {
+            kafkaStickyNoteProducers.forEach(e -> e.sendToKafka((StickyNote) returnValue));
         } else {
-            log.warn("KafkaStickyNoteProducer is not available, skipping Kafka notification");
+            log.warn("No KafkaStickyNoteProducers are available, skipping Kafka notification");
         }
     }
 
     @Autowired(required = false)
-    public void setKafkaStickyNoteProducer(KafkaStickyNoteProducer kafkaStickyNoteProducer) {
-        this.kafkaStickyNoteProducer = kafkaStickyNoteProducer;
+    public void setKafkaStickyNoteProducer(List<KafkaStickyNoteProducer> kafkaStickyNoteProducers) {
+        this.kafkaStickyNoteProducers = kafkaStickyNoteProducers;
     }
 }
