@@ -15,6 +15,7 @@
     <modules>
         <module>springbootnote</module>
         <module>springbootnotecategorizer</module>
+        <module>springbootnotecommon</module>
     </modules>
 
 </project>

@@ -44,9 +44,10 @@ app:
     threshold: 5
   kafka:
     bootstrap-servers: localhost:29092
+    schema-registry-url: http://localhost:8081
     json:
       enabled: true
-      stickynote-topic-json: playground.stickynote.json
+      stickynote-topic: playground.stickynote.json
     avro:
       enabled: true
-      stickynote-topic-avro: playground.stickynote.avro
+      stickynote-topic: playground.stickynote.avro

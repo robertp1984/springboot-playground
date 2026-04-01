@@ -24,8 +24,16 @@
         <java.version>25</java.version>
         <flyway.version>11.20.3</flyway.version>
         <kafka.version>4.2.0</kafka.version>
-        <avro.version>1.12.1</avro.version>
+        <confluent.version>8.2.0</confluent.version>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>confluent</id>
+            <url>https://packages.confluent.io/maven/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -133,12 +141,18 @@
             <artifactId>kafka-clients</artifactId>
             <version>${kafka.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.confluent</groupId>
+            <artifactId>kafka-avro-serializer</artifactId>
+            <version>${confluent.version}</version>
+        </dependency>
 
         <dependency>
-            <groupId>org.apache.avro</groupId>
-            <artifactId>avro</artifactId>
-            <version>${avro.version}</version>
+            <groupId>org.softwarecave</groupId>
+            <artifactId>springbootnotecommon</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
+
     </dependencies>
 
     <build>
@@ -170,28 +184,6 @@
                     <execution>
                         <goals>
                             <goal>build-info</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.avro</groupId>
-                <artifactId>avro-maven-plugin</artifactId>
-                <version>${avro.version}</version>
-                <configuration>
-                    <sourceDirectory>${project.basedir}/src/main/resources/avro</sourceDirectory>
-                    <stringType>String</stringType>
-                    <createSetters>false</createSetters>
-                    <enableDecimalLogicalType>true</enableDecimalLogicalType>
-                    <fieldVisibility>private</fieldVisibility>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>schema</goal>
-                            <goal>protocol</goal>
-                            <goal>idl-protocol</goal>
                         </goals>
                     </execution>
                 </executions>

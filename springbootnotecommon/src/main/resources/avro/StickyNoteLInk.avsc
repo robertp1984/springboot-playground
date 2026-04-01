@@ -1,0 +1,23 @@
+{
+  "namespace": "org.softwarecave.springbootnote.avro",
+  "type": "record",
+  "name": "StickyNoteLink",
+  "version": "1.0",
+  "fields": [
+    {
+      "name": "id",
+      "type": "long",
+      "doc": "ID of the sticky note link"
+    },
+    {
+      "name": "stickyNoteId",
+      "type": "long",
+      "doc": "ID of the associated sticky note"
+    },
+    {
+      "name": "link",
+      "type": "string",
+      "doc": "URL of the link"
+    }
+  ]
+}

@@ -1,1 +1,1 @@
-docker compose up postgresql kafka1 kafka2 kafka3 kafka-connect1
+docker compose up postgresql kafka1 kafka2 kafka3 schema-registry kafka-connect1

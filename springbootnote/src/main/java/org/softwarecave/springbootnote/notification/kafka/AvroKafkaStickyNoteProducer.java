@@ -1,5 +1,6 @@
 package org.softwarecave.springbootnote.notification.kafka;
 
+import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
@@ -8,45 +9,41 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.serialization.LongSerializer;
-import org.apache.kafka.common.serialization.StringSerializer;
+import org.softwarecave.springbootnote.avro.StickyNoteLink;
 import org.softwarecave.springbootnote.note.model.StickyNote;
-import org.softwarecave.springbootnote.note.web.StickyNoteDTO;
-import org.softwarecave.springbootnote.note.web.converter.StickyNoteConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBooleanProperty;
 import org.springframework.stereotype.Component;
-import tools.jackson.databind.json.JsonMapper;
 
+import java.time.ZoneOffset;
 import java.util.Properties;
 
 @Slf4j
 @Component
-@ConditionalOnBooleanProperty(prefix = "app.kafka.json", name = "enabled", havingValue = true)
-public class JsonKafkaStickyNoteProducer implements KafkaStickyNoteProducer {
+@ConditionalOnBooleanProperty(prefix = "app.kafka.avro", name = "enabled", havingValue = true)
+public class AvroKafkaStickyNoteProducer implements KafkaStickyNoteProducer {
 
-    private final JsonMapper jsonMapper;
     private final String bootstrapServers;
     private final String noteTopic;
+    private final String schemaRegistryUrl;
 
-    private KafkaProducer<Long, String> kafkaProducer;
-    private final StickyNoteConverter stickyNoteConverter;
+    private KafkaProducer<Long, org.softwarecave.springbootnote.avro.StickyNote> kafkaProducer;
 
-    public JsonKafkaStickyNoteProducer(JsonMapper jsonMapper,
-                                       @Value("${app.kafka.bootstrap-servers}") String bootstrapServers,
-                                       @Value("${app.kafka.json.stickynote-topic}") String noteTopic) {
-        this.jsonMapper = jsonMapper;
+    public AvroKafkaStickyNoteProducer(@Value("${app.kafka.bootstrap-servers}") String bootstrapServers,
+                                       @Value("${app.kafka.avro.stickynote-topic}") String noteTopic,
+                                       @Value("${app.kafka.schema-registry-url}") String schemaRegistryUrl) {
         this.bootstrapServers = bootstrapServers;
         this.noteTopic = noteTopic;
-
-        this.stickyNoteConverter = new StickyNoteConverter();
+        this.schemaRegistryUrl = schemaRegistryUrl;
     }
 
     @PostConstruct
     public void init() {
         Properties properties = new Properties();
         properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        properties.setProperty("schema.registry.url", schemaRegistryUrl);
         properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, LongSerializer.class.getName());
-        properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class.getName());
         properties.setProperty(ProducerConfig.LINGER_MS_CONFIG, "50");
         properties.setProperty(ProducerConfig.COMPRESSION_TYPE_CONFIG, "gzip");
 
@@ -63,10 +60,10 @@ public class JsonKafkaStickyNoteProducer implements KafkaStickyNoteProducer {
 
     @Override
     public void sendToKafka(StickyNote value) {
-        StickyNoteDTO dto = stickyNoteConverter.convertToDTO(value);
-        Long key = dto.getId();
-        String jsonValue = jsonMapper.writeValueAsString(dto);
-        var producerRecord = new ProducerRecord<>(noteTopic, key, jsonValue);
+        var stickyNoteAvro = convertToAvro(value);
+
+        Long key = stickyNoteAvro.getId();
+        var producerRecord = new ProducerRecord<>(noteTopic, key, stickyNoteAvro);
         kafkaProducer.send(producerRecord, (RecordMetadata metadata, Exception exception) -> {
             if (exception != null) {
                 log.error("Failed to send message to Kafka", exception);
@@ -75,6 +72,25 @@ public class JsonKafkaStickyNoteProducer implements KafkaStickyNoteProducer {
                         metadata.topic(), metadata.partition(), metadata.offset());
             }
         });
+    }
+
+    private static org.softwarecave.springbootnote.avro.StickyNote convertToAvro(StickyNote value) {
+        var linksAvro = value.getLinks().stream().map(link ->
+                StickyNoteLink.newBuilder()
+                        .setId(link.getId())
+                        .setStickyNoteId(link.getStickyNote().getId())
+                        .setLink(link.getLink())
+                        .build()
+        ).toList();
+
+        return org.softwarecave.springbootnote.avro.StickyNote.newBuilder()
+                .setId(value.getId())
+                .setTitle(value.getTitle())
+                .setBody(value.getBody())
+                .setType(value.getType().name())
+                .setCreated(value.getCreated().toInstant(ZoneOffset.UTC).toEpochMilli())
+                .setLinks(linksAvro)
+                .build();
     }
 
 }

@@ -2,34 +2,41 @@
   "namespace": "org.softwarecave.springbootnote.avro",
   "type": "record",
   "name": "StickyNote",
+  "version": "1.0",
   "fields": [
     {
       "name": "id",
-      "type": "long"
+      "type": "long",
+      "doc": "ID of the sticky note"
     },
     {
       "name": "title",
-      "type": "string"
+      "type": "string",
+      "doc": "Title of the sticky note"
     },
     {
       "name": "body",
-      "type": "string"
+      "type": "string",
+      "doc": "Body content of the sticky note"
     },
     {
       "name": "type",
-      "type": "string"
+      "type": "string",
+      "doc": "Type of the sticky note"
     },
     {
       "name": "links",
       "type": {
         "type": "array",
         "items": "org.softwarecave.springbootnote.avro.StickyNoteLink"
-      }
+      },
+      "doc": "List of links associated with the sticky note"
     },
     {
       "name": "created",
       "type": "long",
-      "logicalType": "timestamp-millis"
+      "logicalType": "timestamp-millis",
+      "doc": "Creation date of the sticky note"
     }
   ]
 }
