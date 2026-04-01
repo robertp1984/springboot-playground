@@ -29,7 +29,7 @@ public class StickyNoteDTO {
     @NotNull
     private Type type;
 
-    private List<StickyNoteLinkDTO> stickyNoteLinks = new ArrayList<>();
+    private List<StickyNoteLinkDTO> links = new ArrayList<>();
 
     @PastOrPresent
     @NotNull

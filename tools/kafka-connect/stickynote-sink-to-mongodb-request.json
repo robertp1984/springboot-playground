@@ -3,12 +3,19 @@
   "config": {
     "connector.class": "com.mongodb.kafka.connect.MongoSinkConnector",
     "topics": "playground.stickynote",
-    "connection.uri": "mongodb://root:password@mongo:27017",
     "key.converter": "org.apache.kafka.connect.converters.LongConverter",
     "key.converter.schemas.enable": false,
     "value.converter": "org.apache.kafka.connect.json.JsonConverter",
     "value.converter.schemas.enable": false,
+
+    "connection.uri": "mongodb://root:password@mongo:27017",
     "database": "playground",
-    "collection": "stickynote"
+    "collection": "stickynote",
+
+    "transforms": "ISOStringToDate",
+    "transforms.ISOStringToDate.type": "org.apache.kafka.connect.transforms.TimestampConverter$Value",
+    "transforms.ISOStringToDate.target.type": "Timestamp",
+    "transforms.ISOStringToDate.field": "created",
+    "transforms.ISOStringToDate.format": "yyyy-MM-dd'T'HH:mm:ss"
   }
 }

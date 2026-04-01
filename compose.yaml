@@ -150,6 +150,7 @@ services:
     hostname: mongo
     volumes:
       - ./data/mongo:/data/db
+      - ./docker/mongo/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     environment:
       - MONGO_INITDB_DATABASE=playground
       - MONGO_INITDB_ROOT_USERNAME=root

@@ -26,7 +26,7 @@ public class StickyNoteConverterTest {
         assertThat(dto.getTitle()).isEqualTo("Title");
         assertThat(dto.getBody()).isEqualTo("Body");
         assertThat(dto.getType()).isEqualTo(Type.PLAIN_TEXT);
-        assertThat(dto.getStickyNoteLinks()).isEmpty();
+        assertThat(dto.getLinks()).isEmpty();
         assertThat(dto.getCreated()).isEqualTo(note.getCreated());
     }
 
@@ -48,8 +48,8 @@ public class StickyNoteConverterTest {
         StickyNoteDTO dto = converter.convertToDTO(note);
 
         assertThat(dto.getId()).isEqualTo(2L);
-        assertThat(dto.getStickyNoteLinks()).hasSize(2);
-        assertThat(dto.getStickyNoteLinks()).extracting(StickyNoteLinkDTO::getLink).containsExactlyInAnyOrder("http://a", "http://b");
+        assertThat(dto.getLinks()).hasSize(2);
+        assertThat(dto.getLinks()).extracting(StickyNoteLinkDTO::getLink).containsExactlyInAnyOrder("http://a", "http://b");
     }
 
     @Test

@@ -22,8 +22,8 @@ public class StickyNoteConverter {
         StickyNote note = new StickyNote(noteDTO.getId(), noteDTO.getTitle(), noteDTO.getBody(), noteDTO.getType(), new ArrayList<>(), noteDTO.getCreated());
 
         StickyNoteLinkConverter linkConverter = new StickyNoteLinkConverter(note);
-        if (noteDTO.getStickyNoteLinks() != null) {
-            noteDTO.getStickyNoteLinks().stream().map(linkConverter::convertToEntity).forEach(e -> note.getLinks().add(e));
+        if (noteDTO.getLinks() != null) {
+            noteDTO.getLinks().stream().map(linkConverter::convertToEntity).forEach(e -> note.getLinks().add(e));
         }
         return note;
     }

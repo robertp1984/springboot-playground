@@ -3,7 +3,7 @@
     "title": "Git push",
     "body": "Call 'git push origin' to send your changes to repository referred to by origin.",
     "type": "PLAIN_TEXT",
-    "stickyNoteLinks": [
+    "links": [
       {
         "link": "http://git-scm.org/docs/git-push"
       }
@@ -14,7 +14,7 @@
     "title": "Git pull",
     "body": "Call 'git pull' to fetch latest changes from the repository referred to by origin.",
     "type": "PLAIN_TEXT",
-    "stickyNoteLinks": [
+    "links": [
       {
         "link": "http://git-scm.org/docs/git-push"
       }
@@ -25,7 +25,7 @@
     "title": "Create Kafka topic",
     "body": "kafka-topics.sh --create --topic quickstart-events --bootstrap-server localhost:9092 --partitions 3 --replication-factor 2",
     "type": "PLAIN_TEXT",
-    "stickyNoteLinks": [
+    "links": [
       {
         "link": "https://kafka.apache.org/"
       }
@@ -36,7 +36,7 @@
     "title": "Describe Kafka topic",
     "body": "kafka-topics.sh --describe --topic quickstart-events --bootstrap-server localhost:9092",
     "type": "PLAIN_TEXT",
-    "stickyNoteLinks": [
+    "links": [
       {
         "link": "https://kafka.apache.org/"
       }
@@ -47,7 +47,7 @@
     "title": "Initialize Spring Boot project in seconds",
     "body": "Just go to https://start.spring.io/ and select the dependencies you need. You can download the Spring Boot project as a zip file and import it in your favourite IDE.",
     "type": "PLAIN_TEXT",
-    "stickyNoteLinks": [
+    "links": [
       {
         "link": "https://start.spring.io/"
       }

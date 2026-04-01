@@ -114,7 +114,7 @@ public class StickyNoteControllerTest {
                 .andExpect(jsonPath("$.title").value(addedStickyNote.getTitle()))
                 .andExpect(jsonPath("$.body").value(addedStickyNote.getBody()))
                 .andExpect(jsonPath("$.type").value(addedStickyNote.getType().name()))
-                .andExpect(jsonPath("$.stickyNoteLinks").isEmpty())
+                .andExpect(jsonPath("$.links").isEmpty())
                 .andExpect(jsonPath("$.created").isNotEmpty());
 
         assertThat(argumentCaptor.getValue())
@@ -143,7 +143,7 @@ public class StickyNoteControllerTest {
                 .andExpect(jsonPath("$.title").value(updatedStickyNote.getTitle()))
                 .andExpect(jsonPath("$.body").value(updatedStickyNote.getBody()))
                 .andExpect(jsonPath("$.type").value(updatedStickyNote.getType().name()))
-                .andExpect(jsonPath("$.stickyNoteLinks").isEmpty())
+                .andExpect(jsonPath("$.links").isEmpty())
                 .andExpect(jsonPath("$.created").isNotEmpty());
     }
 
