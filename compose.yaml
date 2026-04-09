@@ -128,6 +128,24 @@ services:
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'kafka1:29092, kafka2:29092, kafka3:29092'
       SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
 
+  rest-proxy:
+    image: confluentinc/cp-kafka-rest:8.1.1
+    depends_on:
+      - kafka1
+      - kafka2
+      - kafka3
+      - schema-registry
+    ports:
+      - "8082:8082"
+    hostname: rest-proxy
+    container_name: rest-proxy
+    environment:
+      KAFKA_REST_HOST_NAME: rest-proxy
+      KAFKA_REST_BOOTSTRAP_SERVERS: 'kafka1:29092, kafka2:29092, kafka3:29092'
+      KAFKA_REST_LISTENERS: "http://0.0.0.0:8082"
+      KAFKA_REST_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
+
+
   kafka-connect1:
     image: cp-kafka-connect-my:8.1.1
     build:
