@@ -23,7 +23,7 @@
   },
   {
     "title": "Create Kafka topic",
-    "body": "kafka-topics.sh --create --topic quickstart-events --bootstrap-server localhost:9092 --partitions 3 --replication-factor 2",
+    "body": "kafka-topics.sh --create --topic quickstart-events --bootstrap-server localhost:9092 --partitions 9 --replication-factor 2",
     "type": "PLAIN_TEXT",
     "links": [
       {

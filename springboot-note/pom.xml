@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>org.softwarecave</groupId>
-    <artifactId>springbootnote</artifactId>
+    <artifactId>springboot-note</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>springboot-note</name>
     <description>SpringBoot Note application to test various technologies</description>
@@ -149,7 +149,7 @@
 
         <dependency>
             <groupId>org.softwarecave</groupId>
-            <artifactId>springbootnotecommon</artifactId>
+            <artifactId>springboot-note-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 

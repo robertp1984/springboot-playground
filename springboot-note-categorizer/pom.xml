@@ -9,7 +9,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>springbootnotecategorizer</artifactId>
+    <artifactId>springboot-note-categorizer</artifactId>
 
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
@@ -19,7 +19,7 @@
         <slf4j-api.version>2.0.17</slf4j-api.version>
         <logback-core.version>1.5.32</logback-core.version>
         <kafka-streams.version>4.2.0</kafka-streams.version>
-        <main.class>org.softwarecave.springbootnotecategorizer.NoteCategorizerApplication</main.class>
+        <main.class>org.softwarecave.springbootnotecategorizer.Main</main.class>
         <assertj.version>3.27.7</assertj.version>
         <junit.version>6.0.2</junit.version>
         <json-path.version>3.0.0</json-path.version>

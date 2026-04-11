@@ -28,6 +28,8 @@ public class Main {
         ParsedArgs result;
         if (args.length == 0) {
             result = new ParsedArgs(BOOTSTRAP_SERVERS, INPUT_TOPIC, OUTPUT_TOPIC);
+        } else if (args.length == 1) {
+            result = new ParsedArgs(args[0], INPUT_TOPIC, OUTPUT_TOPIC);
         } else if (args.length == 3) {
             result = new ParsedArgs(args[0], args[1], args[2]);
         } else {

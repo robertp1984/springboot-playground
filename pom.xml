@@ -13,9 +13,9 @@
     </properties>
 
     <modules>
-        <module>springbootnote</module>
-        <module>springbootnotecategorizer</module>
-        <module>springbootnotecommon</module>
+        <module>springboot-note</module>
+        <module>springboot-note-categorizer</module>
+        <module>springboot-note-common</module>
     </modules>
 
 </project>
