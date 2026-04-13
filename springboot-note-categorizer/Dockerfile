@@ -1,7 +1,7 @@
 FROM amazoncorretto:25.0.0-alpine
 
 ARG JAR_FILE=./target/springboot-note-categorizer*jar-with-dependencies.jar
-ENV KAFKA_BOOTSTRAP_SERVER=kafka1:29092
+ENV KAFKA_BOOTSTRAP_SERVERS=kafka1:29092
 
 RUN addgroup app && adduser -D -G app app
 
