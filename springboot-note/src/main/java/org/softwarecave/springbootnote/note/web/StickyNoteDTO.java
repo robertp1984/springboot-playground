@@ -31,6 +31,8 @@ public class StickyNoteDTO {
 
     private List<StickyNoteLinkDTO> links = new ArrayList<>();
 
+    private List<StickyNoteTagDTO> tags = new ArrayList<>();
+
     @PastOrPresent
     @NotNull
     private LocalDateTime created;

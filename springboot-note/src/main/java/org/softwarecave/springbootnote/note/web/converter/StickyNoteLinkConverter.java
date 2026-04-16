@@ -6,6 +6,8 @@ import org.softwarecave.springbootnote.note.web.StickyNoteLinkDTO;
 
 import java.util.Objects;
 
+import static org.softwarecave.springbootnote.note.web.converter.StickyNoteConverter.verifyId;
+
 public class StickyNoteLinkConverter {
 
     private final StickyNote stickyNote;
@@ -20,9 +22,7 @@ public class StickyNoteLinkConverter {
     }
 
     public StickyNoteLink convertToEntity(StickyNoteLinkDTO dto) {
-        if (stickyNote == null
-                || (dto.getStickyNoteId() == null && stickyNote.getId() == null)
-                || (dto.getStickyNoteId() != null && Objects.equals(dto.getStickyNoteId(), stickyNote.getId()))) {
+        if (verifyId(stickyNote, dto.getStickyNoteId())) {
             return new StickyNoteLink(dto.getId(), stickyNote, dto.getLink());
         } else {
             throw new IllegalArgumentException("StickyNote IDs are not equal");

@@ -18,13 +18,22 @@ import javax.sql.DataSource;
 public class SecurityConfiguration {
 
     public static final String ACTUATOR_VIEWER = "ACTUATOR_VIEWER";
+
+    public static final String API_V1_HELLO_BASE = "/api/v1/hello";
+
     public static final String STICKY_NOTES_VIEWER = "STICKY_NOTES_VIEWER";
     public static final String STICKY_NOTES_ADMIN = "STICKY_NOTES_ADMIN";
     public static final String STICKY_NOTES_MANAGER = "STICKY_NOTES_MANAGER";
 
     public static final String API_V1_STICKY_NOTES_ALL = "/api/v1/stickyNotes/**";
     public static final String API_V1_STICKY_NOTES_BASE = "/api/v1/stickyNotes";
-    public static final String API_V1_HELLO_BASE = "/api/v1/hello";
+
+    public static final String TAGS_VIEWER = "TAGS_VIEWER";
+    public static final String TAGS_ADMIN = "TAGS_ADMIN";
+    public static final String TAGS_MANAGER = "TAGS_MANAGER";
+
+    public static final String API_V1_TAGS_ALL = "/api/v1/tags/**";
+    public static final String API_V1_TAGS_BASE = "/api/v1/tags";
 
     @Bean
     public SecurityFilterChain createSecurityFilterChain(HttpSecurity http) {
@@ -42,11 +51,18 @@ public class SecurityConfiguration {
                 .requestMatchers(HttpMethod.GET, "/actuator", "/actuator/**").hasRole(ACTUATOR_VIEWER)
                 // application endpoints
                 .requestMatchers(API_V1_HELLO_BASE).anonymous()
+                // sticky notes
                 .requestMatchers(HttpMethod.GET, API_V1_STICKY_NOTES_BASE, API_V1_STICKY_NOTES_ALL).hasRole(STICKY_NOTES_VIEWER)
                 .requestMatchers(HttpMethod.POST, API_V1_STICKY_NOTES_BASE).hasRole(STICKY_NOTES_MANAGER)
                 .requestMatchers(HttpMethod.PUT, API_V1_STICKY_NOTES_ALL).hasRole(STICKY_NOTES_MANAGER)
                 .requestMatchers(HttpMethod.DELETE, API_V1_STICKY_NOTES_ALL).hasRole(STICKY_NOTES_ADMIN)
                 .requestMatchers(HttpMethod.PATCH, API_V1_STICKY_NOTES_ALL).hasRole(STICKY_NOTES_MANAGER)
+                // tags
+                .requestMatchers(HttpMethod.GET, API_V1_TAGS_BASE, API_V1_TAGS_ALL).hasRole(TAGS_VIEWER)
+                .requestMatchers(HttpMethod.POST, API_V1_TAGS_BASE).hasRole(TAGS_MANAGER)
+                .requestMatchers(HttpMethod.PUT, API_V1_TAGS_ALL).hasRole(TAGS_MANAGER)
+                .requestMatchers(HttpMethod.DELETE, API_V1_TAGS_ALL).hasRole(TAGS_ADMIN)
+                .requestMatchers(HttpMethod.PATCH, API_V1_TAGS_ALL).hasRole(TAGS_MANAGER)
                 // deny all other requests
                 .anyRequest().denyAll();
     }

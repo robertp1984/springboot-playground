@@ -234,7 +234,7 @@ public class StickyNoteServiceIntegrationTest {
     }
 
     private static StickyNote createStickyNoteWithoutLinks() {
-        return new StickyNote(null, "My title", "My body", Type.PLAIN_TEXT, new ArrayList<>(), LocalDateTime.now());
+        return new StickyNote(null, "My title", "My body", Type.PLAIN_TEXT, new ArrayList<>(), new ArrayList<>(), LocalDateTime.now());
     }
 
     private void assertIsConstraintViolationException(Throwable exception) {

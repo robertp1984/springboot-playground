@@ -1,6 +1,7 @@
 package org.softwarecave.springbootnote.config.web;
 
 import org.softwarecave.springbootnote.note.model.NoSuchStickyNoteException;
+import org.softwarecave.springbootnote.tag.model.NoSuchTagException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,6 +27,11 @@ public class WebControllerAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<String> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<String> handleNoSuchTagException(NoSuchTagException ex, WebRequest request) {
+        return ResponseEntity.notFound().build();
     }
 
 }

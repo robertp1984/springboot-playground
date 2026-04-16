@@ -54,6 +54,9 @@ public class StickyNote {
     @EqualsAndHashCode.Exclude
     private List<StickyNoteLink> links = new ArrayList<>();
 
+    @OneToMany(mappedBy = "stickyNote", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<StickyNoteTag> tags = new ArrayList<>();
+
     @Column(name = "created")
     @PastOrPresent
     @NotNull

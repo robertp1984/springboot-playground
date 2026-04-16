@@ -16,7 +16,7 @@ public class StickyNoteConverterTest {
 
     @Test
     public void convertToDTO_withNoLinks_returnsDTOWithEmptyLinksList() {
-        StickyNote note = new StickyNote(1L, "Title", "Body", Type.PLAIN_TEXT, null, LocalDateTime.now());
+        StickyNote note = new StickyNote(1L, "Title", "Body", Type.PLAIN_TEXT, null, null, LocalDateTime.now());
 
         StickyNoteConverter converter = new StickyNoteConverter();
 
@@ -55,7 +55,7 @@ public class StickyNoteConverterTest {
     @Test
     public void convertToEntity_withNoLinks_returnsEntityWithEmptyLinksList() {
         LocalDateTime now = LocalDateTime.now();
-        StickyNoteDTO dto = new StickyNoteDTO(3L, "T2", "B2", Type.PLAIN_TEXT, null, now);
+        StickyNoteDTO dto = new StickyNoteDTO(3L, "T2", "B2", Type.PLAIN_TEXT, null, null, now);
 
         StickyNoteConverter converter = new StickyNoteConverter();
 
@@ -74,7 +74,7 @@ public class StickyNoteConverterTest {
         LocalDateTime now = LocalDateTime.now();
         StickyNoteLinkDTO ld1 = new StickyNoteLinkDTO(20L, 4L, "http://x");
         StickyNoteLinkDTO ld2 = new StickyNoteLinkDTO(21L, 4L, "http://y");
-        StickyNoteDTO dto = new StickyNoteDTO(4L, "TT", "BB", Type.PLAIN_TEXT, Arrays.asList(ld1, ld2), now);
+        StickyNoteDTO dto = new StickyNoteDTO(4L, "TT", "BB", Type.PLAIN_TEXT, Arrays.asList(ld1, ld2), null, now);
 
         StickyNoteConverter converter = new StickyNoteConverter();
 

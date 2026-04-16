@@ -49,7 +49,7 @@ public class StickyNoteControllerTest {
     @Test
     @WithMockUser(roles = SecurityConfiguration.STICKY_NOTES_VIEWER)
     public void testGetStickyNote() throws Exception {
-        StickyNote stickyNote = new StickyNote(6L, "CSV note", "CSV note body", Type.PLAIN_TEXT, null, LocalDateTime.now());
+        StickyNote stickyNote = new StickyNote(6L, "CSV note", "CSV note body", Type.PLAIN_TEXT, null, null, LocalDateTime.now());
         when(stickyNoteService.getStickyNoteById(6L)).thenReturn(stickyNote);
 
         mockMvc.perform(get("/api/v1/stickyNotes/6"))
@@ -65,8 +65,8 @@ public class StickyNoteControllerTest {
     @Test
     @WithMockUser(roles = SecurityConfiguration.STICKY_NOTES_VIEWER)
     public void testGetStickyNotes() throws Exception {
-        StickyNote stickyNote1 = new StickyNote(1L, "CSV note1", "CSV note body1", Type.PLAIN_TEXT, null, LocalDateTime.now());
-        StickyNote stickyNote2 = new StickyNote(2L, "CSV note2", "CSV note body2", Type.PLAIN_TEXT, null, LocalDateTime.now());
+        StickyNote stickyNote1 = new StickyNote(1L, "CSV note1", "CSV note body1", Type.PLAIN_TEXT, null, null, LocalDateTime.now());
+        StickyNote stickyNote2 = new StickyNote(2L, "CSV note2", "CSV note body2", Type.PLAIN_TEXT, null, null, LocalDateTime.now());
         when(stickyNoteService.getStickyNotes()).thenReturn(List.of(stickyNote1, stickyNote2));
 
         mockMvc.perform(get("/api/v1/stickyNotes"))
@@ -98,8 +98,8 @@ public class StickyNoteControllerTest {
     @Test
     @WithMockUser(roles = SecurityConfiguration.STICKY_NOTES_MANAGER)
     public void addStickyNote() throws Exception {
-        StickyNoteDTO stickyNoteDTO = new StickyNoteDTO(null, "Title", "Body", Type.PLAIN_TEXT, List.of(), LocalDateTime.now());
-        StickyNote addedStickyNote = new StickyNote(5L, "Title", "Body", Type.PLAIN_TEXT, List.of(), LocalDateTime.now());
+        StickyNoteDTO stickyNoteDTO = new StickyNoteDTO(null, "Title", "Body", Type.PLAIN_TEXT, List.of(), List.of(), LocalDateTime.now());
+        StickyNote addedStickyNote = new StickyNote(5L, "Title", "Body", Type.PLAIN_TEXT, List.of(), List.of(), LocalDateTime.now());
 
         var argumentCaptor = ArgumentCaptor.forClass(StickyNote.class);
         when(stickyNoteService.addStickyNote(argumentCaptor.capture())).thenReturn(addedStickyNote);
@@ -128,8 +128,8 @@ public class StickyNoteControllerTest {
     @Test
     @WithMockUser(roles = SecurityConfiguration.STICKY_NOTES_MANAGER)
     public void updateStickyNote() throws Exception {
-        StickyNoteDTO stickyNoteDTO = new StickyNoteDTO(5L, "Title", "Body", Type.PLAIN_TEXT, List.of(), LocalDateTime.now());
-        StickyNote updatedStickyNote = new StickyNote(5L, "Title", "Body", Type.PLAIN_TEXT, List.of(), LocalDateTime.now());
+        StickyNoteDTO stickyNoteDTO = new StickyNoteDTO(5L, "Title", "Body", Type.PLAIN_TEXT, List.of(), List.of(), LocalDateTime.now());
+        StickyNote updatedStickyNote = new StickyNote(5L, "Title", "Body", Type.PLAIN_TEXT, List.of(), List.of(), LocalDateTime.now());
 
         when(stickyNoteService.updateStickyNote(any())).thenReturn(updatedStickyNote);
 
