@@ -15,7 +15,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import tools.jackson.databind.json.JsonMapper;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -29,7 +28,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -115,6 +113,7 @@ public class StickyNoteControllerTest {
                 .andExpect(jsonPath("$.body").value(addedStickyNote.getBody()))
                 .andExpect(jsonPath("$.type").value(addedStickyNote.getType().name()))
                 .andExpect(jsonPath("$.links").isEmpty())
+                .andExpect(jsonPath("$.tags").isEmpty())
                 .andExpect(jsonPath("$.created").isNotEmpty());
 
         assertThat(argumentCaptor.getValue())
@@ -122,6 +121,7 @@ public class StickyNoteControllerTest {
                 .hasFieldOrPropertyWithValue("body", stickyNoteDTO.getBody())
                 .hasFieldOrPropertyWithValue("type", stickyNoteDTO.getType())
                 .hasFieldOrPropertyWithValue("links", List.of())
+                .hasFieldOrPropertyWithValue("tags", List.of())
                 .hasFieldOrPropertyWithValue("created", stickyNoteDTO.getCreated());
     }
 
@@ -144,6 +144,7 @@ public class StickyNoteControllerTest {
                 .andExpect(jsonPath("$.body").value(updatedStickyNote.getBody()))
                 .andExpect(jsonPath("$.type").value(updatedStickyNote.getType().name()))
                 .andExpect(jsonPath("$.links").isEmpty())
+                .andExpect(jsonPath("$.tags").isEmpty())
                 .andExpect(jsonPath("$.created").isNotEmpty());
     }
 

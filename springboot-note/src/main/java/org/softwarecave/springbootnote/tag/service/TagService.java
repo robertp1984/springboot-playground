@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -50,5 +51,9 @@ public class TagService {
         } else {
             throw new NoSuchTagException("No tag found for ID " + id);
         }
+    }
+
+    public Optional<Tag> getTagByName(String name) {
+        return tagRepository.findByName(name);
     }
 }
