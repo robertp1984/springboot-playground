@@ -32,14 +32,14 @@ def getTagIdByName(name):
     responseObject = json.loads(responseContent)
 
     print("Received tag response: " + str(responseObject))
-    return responseObject[0]['id']
+    return responseObject[0].get('id')
 
 # If the stickyNote contains tags information, read the tag name, fetch the id of the tag and populate it beside tag name.
 # This is needed because the REST service requires the id of the tag instead of its name.
 def updateObjectIds(stickyNote):
     if "tags" in stickyNote:
         for tag in stickyNote['tags']:
-            tagName = tag['tag']['name']
+            tagName = tag.get('tag', {}).get('name')
             tagId = getTagIdByName(tagName)
             tag['tag']['id'] = tagId
 
@@ -61,4 +61,5 @@ def main():
         responseObject = json.loads(responseContent)
         print("Created sticky note " + json.dumps(responseObject, indent = 2))
 
-main()
+if __name__ == "__main__":
+    main()
