@@ -131,24 +131,17 @@ public class StickyNoteServiceIntegrationTest {
 
         // verify links
         assertThat(savedStickyNote.getLinks()).hasSize(2);
-
-        StickyNoteLink savedLink1 = savedStickyNote.getLinks().get(0);
-        assertThat(savedLink1.getId()).isGreaterThan(0);
-        assertThat(savedLink1.getLink()).isEqualTo(URL1);
-
-        StickyNoteLink savedLink2 = savedStickyNote.getLinks().get(1);
-        assertThat(savedLink2.getId()).isGreaterThan(0);
-        assertThat(savedLink2.getLink()).isEqualTo(URL2);
+        assertThat(savedStickyNote.getLinks()).extracting(StickyNoteLink::getId)
+                .allMatch(id -> id > 0);
+        assertThat(savedStickyNote.getLinks()).extracting(StickyNoteLink::getLink)
+                .containsAll(List.of(URL1, URL2));
 
         // verify tags
         assertThat(savedStickyNote.getTags()).hasSize(2);
-        StickyNoteTag savedTag1 = savedStickyNote.getTags().get(0);
-        assertThat(savedTag1.getId()).isGreaterThan(0);
-        assertThat(savedTag1.getTag().getName()).isEqualTo("Tag1");
-
-        StickyNoteTag savedTag2 = savedStickyNote.getTags().get(1);
-        assertThat(savedTag2.getId()).isGreaterThan(0);
-        assertThat(savedTag2.getTag().getName()).isEqualTo("Tag2");
+        assertThat(savedStickyNote.getLinks()).extracting(StickyNoteLink::getId)
+                .allMatch(id -> id > 0);
+        assertThat(savedStickyNote.getTags()).extracting(t -> t.getTag().getName())
+                .containsAll(List.of(TAG1, TAG2));
     }
 
     @Test
