@@ -39,6 +39,7 @@ SELECT add_tag('GCP', 'Google Cloud Platform cloud platform');
 SELECT add_tag('Database', 'Databases');
 SELECT add_tag('Security', 'System security');
 SELECT add_tag('Testing', 'Testing');
+SELECT add_tag('Kafka', 'Kafka streaming platform');
 
 ---
 
