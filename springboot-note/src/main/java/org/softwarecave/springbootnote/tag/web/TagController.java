@@ -1,6 +1,7 @@
 package org.softwarecave.springbootnote.tag.web;
 
 import jakarta.validation.Valid;
+import org.apache.commons.lang3.StringUtils;
 import org.softwarecave.springbootnote.tag.model.NoSuchTagException;
 import org.softwarecave.springbootnote.tag.model.Tag;
 import org.softwarecave.springbootnote.tag.service.TagRepository;
@@ -16,15 +17,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
-@RequestMapping("/api/v1/tags")
+@RequestMapping(path = "/api/v1/tags")
 public class TagController {
 
     private final TagService tagService;
@@ -33,12 +36,6 @@ public class TagController {
     public TagController(TagService tagService) {
         this.tagService = tagService;
         this.tagConverter = new TagConverter();
-    }
-
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<TagDTO> getTags() {
-        var tags = tagService.getTags();
-        return tags.stream().map(tagConverter::convertToDTO).toList();
     }
 
     @GetMapping(path = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -78,5 +75,16 @@ public class TagController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteTag(@PathVariable("id") Long id) {
         tagService.deleteTag(id);
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<TagDTO> getTags(@RequestParam(required = false, value = "name") String name) {
+        List<Tag> foundTags;
+        if (StringUtils.isNotBlank(name)) {
+            foundTags = tagService.getTagByName(name).stream().filter(Objects::nonNull).toList();
+        } else {
+            foundTags = tagService.getTags();
+        }
+        return foundTags.stream().map(tagConverter::convertToDTO).toList();
     }
 }
