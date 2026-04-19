@@ -12,9 +12,9 @@ logger = logging.getLogger(__name__)
 
 username = "zooey"
 password = "test123"
-stickyNotesUrl = "http://localhost:8080/api/v1/stickyNotes"
-tagsUrl = "http://localhost:8080/api/v1/tags"
-inputFilename = "stickynotes.json"
+sticky_notes_url = "http://localhost:8080/api/v1/stickyNotes"
+tags_url = "http://localhost:8080/api/v1/tags"
+input_filename = "stickynotes.json"
 
 class StickyNoteCreator:
 
@@ -42,7 +42,7 @@ class StickyNoteCreator:
             return self.tag_name_to_id_cache[name]
 
         response = self.session.get(
-                    tagsUrl,
+                    tags_url,
                     params = { "name": name },
                     timeout = 5)
         response.raise_for_status()
@@ -64,40 +64,40 @@ class StickyNoteCreator:
 
     # If the stickyNote contains tags information, read the tag name, fetch the id of the tag and populate it beside tag name.
     # This is needed because the REST service requires the id of the tag instead of its name.
-    def update_object_ids(self, stickyNote):
-        if "tags" in stickyNote:
-            for tag in stickyNote['tags']:
+    def update_object_ids(self, sticky_note):
+        if "tags" in sticky_note:
+            for tag in sticky_note['tags']:
                 tagName = tag.get('tag', {}).get('name')
                 if tagName is None:
-                    raise ValueError(f"Missing name in tags for stickyNote {stickyNote}")
+                    raise ValueError(f"Missing name in tags for stickyNote {sticky_note}")
                 tagId = self.get_tag_id_by_name(tagName)
                 tag['tag']['id'] = tagId
-        return stickyNote
+        return sticky_note
 
-    def create_sticky_note(self, stickyNote):
-        updatedStickyNote = self.update_object_ids(stickyNote)
+    def create_sticky_note(self, sticky_note):
+        updated_sticky_note = self.update_object_ids(sticky_note)
 
         response = self.session.post(
-            stickyNotesUrl,
-            json = updatedStickyNote,
+            sticky_notes_url,
+            json = updated_sticky_note,
             timeout = 5
         )
         response.raise_for_status()
         result = response.json()
 
-        resultJsonText = json.dumps(result, indent=2)
-        logger.info(f"Created sticky note: {resultJsonText}")
+        result_json_text = json.dumps(result, indent=2)
+        logger.info(f"Created sticky note: {result_json_text}")
 
 
-    def create(self, stickyNoteList):
-        for stickyNote in stickyNoteList:
+    def create(self, sticky_note_list):
+        for sticky_note in sticky_note_list:
             try:
-                self.create_sticky_note(stickyNote)
+                self.create_sticky_note(sticky_note)
             except Exception as e:
-                logger.error(f"Failed to create sticky note {stickyNote}: {e}")
+                logger.error(f"Failed to create sticky note {sticky_note}: {e}")
 
 if __name__ == "__main__":
-    with open(inputFilename, encoding = "utf-8") as f:
-        stickyNoteList = json.load(f)
+    with open(input_filename, encoding ="utf-8") as f:
+        sticky_note_list = json.load(f)
     with StickyNoteCreator() as creator:
-        creator.create(stickyNoteList)
+        creator.create(sticky_note_list)
