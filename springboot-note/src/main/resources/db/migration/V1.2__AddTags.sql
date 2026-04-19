@@ -1,10 +1,10 @@
 CREATE TABLE tag (
     id NUMERIC(20) PRIMARY KEY,
-    name VARCHAR(1024) NOT NULL,
+    name VARCHAR(1024) NOT NULL UNIQUE,
     description VARCHAR(1024) NOT NULL
 );
 CREATE SEQUENCE tag_seq  START WITH 1 INCREMENT BY 1;
-CREATE INDEX tag_name_idx ON tag(name);
+CREATE UNIQUE INDEX tag_name_idx ON tag(name);
 
 -----
 
