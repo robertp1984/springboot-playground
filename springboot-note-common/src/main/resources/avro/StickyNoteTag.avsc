@@ -1,0 +1,23 @@
+{
+  "namespace": "org.softwarecave.springbootnote.avro",
+  "type": "record",
+  "name": "StickyNoteTag",
+  "version": "1.0",
+  "fields": [
+    {
+      "name": "id",
+      "type": "long",
+      "doc": "Identifier of the sticky note tag"
+    },
+    {
+      "name": "stickyNoteId",
+      "type": "long",
+      "doc": "ID of the associated sticky note"
+    },
+    {
+      "name": "tag",
+      "type": "org.softwarecave.springbootnote.avro.Tag",
+      "doc": "Associated tag definition"
+    }
+  ]
+}
