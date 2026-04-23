@@ -9,13 +9,12 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.serialization.LongSerializer;
-import org.softwarecave.springbootnote.avro.StickyNoteLink;
 import org.softwarecave.springbootnote.note.model.StickyNote;
+import org.softwarecave.springbootnote.notification.kafka.converter.AvroStickyNoteConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBooleanProperty;
 import org.springframework.stereotype.Component;
 
-import java.time.ZoneOffset;
 import java.util.Properties;
 
 @Slf4j
@@ -26,6 +25,7 @@ public class AvroKafkaStickyNoteProducer implements KafkaStickyNoteProducer {
     private final String bootstrapServers;
     private final String noteTopic;
     private final String schemaRegistryUrl;
+    private final AvroStickyNoteConverter converter;
 
     private KafkaProducer<Long, org.softwarecave.springbootnote.avro.StickyNote> kafkaProducer;
 
@@ -35,6 +35,7 @@ public class AvroKafkaStickyNoteProducer implements KafkaStickyNoteProducer {
         this.bootstrapServers = bootstrapServers;
         this.noteTopic = noteTopic;
         this.schemaRegistryUrl = schemaRegistryUrl;
+        this.converter = new AvroStickyNoteConverter();
     }
 
     @PostConstruct
@@ -60,7 +61,7 @@ public class AvroKafkaStickyNoteProducer implements KafkaStickyNoteProducer {
 
     @Override
     public void sendToKafka(StickyNote value) {
-        var stickyNoteAvro = convertToAvro(value);
+        var stickyNoteAvro = converter.convertToAvro(value);
 
         Long key = stickyNoteAvro.getId();
         var producerRecord = new ProducerRecord<>(noteTopic, key, stickyNoteAvro);
@@ -74,23 +75,6 @@ public class AvroKafkaStickyNoteProducer implements KafkaStickyNoteProducer {
         });
     }
 
-    private static org.softwarecave.springbootnote.avro.StickyNote convertToAvro(StickyNote value) {
-        var linksAvro = value.getLinks().stream().map(link ->
-                StickyNoteLink.newBuilder()
-                        .setId(link.getId())
-                        .setStickyNoteId(link.getStickyNote().getId())
-                        .setLink(link.getLink())
-                        .build()
-        ).toList();
 
-        return org.softwarecave.springbootnote.avro.StickyNote.newBuilder()
-                .setId(value.getId())
-                .setTitle(value.getTitle())
-                .setBody(value.getBody())
-                .setType(value.getType().name())
-                .setCreated(value.getCreated().toInstant(ZoneOffset.UTC).toEpochMilli())
-                .setLinks(linksAvro)
-                .build();
-    }
 
 }

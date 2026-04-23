@@ -30,7 +30,17 @@
         "type": "array",
         "items": "org.softwarecave.springbootnote.avro.StickyNoteLink"
       },
-      "doc": "List of links associated with the sticky note"
+      "doc": "List of links associated with the sticky note",
+      "default": []
+    },
+    {
+      "name": "tags",
+      "type": {
+        "type": "array",
+        "items": "org.softwarecave.springbootnote.avro.StickyNoteTag"
+      },
+      "doc": "List of tags associated with the sticky note",
+      "default": []
     },
     {
       "name": "created",

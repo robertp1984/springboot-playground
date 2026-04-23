@@ -1,0 +1,23 @@
+{
+  "namespace": "org.softwarecave.springbootnote.avro",
+  "type": "record",
+  "name": "Tag",
+  "version": "1.0",
+  "fields": [
+    {
+      "name": "id",
+      "type": "long",
+      "doc": "ID of the tag"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "doc": "Name of the tag"
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "doc": "Description of the tag"
+    }
+  ]
+}
