@@ -18,9 +18,12 @@ import java.util.Optional;
 public class StickyNoteServiceImpl implements StickyNoteService {
 
     private final StickyNoteRepository stickyNoteRepository;
+    private final StickyNoteProcessor stickyNoteProcessor;
 
-    public StickyNoteServiceImpl(StickyNoteRepository stickyNoteRepository) {
+    public StickyNoteServiceImpl(StickyNoteRepository stickyNoteRepository,
+                                 StickyNoteProcessor stickyNoteProcessor) {
         this.stickyNoteRepository = stickyNoteRepository;
+        this.stickyNoteProcessor = stickyNoteProcessor;
     }
 
     @Override
@@ -43,13 +46,9 @@ public class StickyNoteServiceImpl implements StickyNoteService {
         if (stickyNote.getId() != null) {
             throw new IllegalArgumentException("Sticky note id already exists");
         }
-        boolean linkHasId = stickyNote.getLinks() != null
-                && stickyNote.getLinks()
-                .stream()
-                .anyMatch(stickyNoteLink -> stickyNoteLink.getId() != null);
-        if (linkHasId) {
-            throw new IllegalArgumentException("Sticky note link id already exists");
-        }
+
+        stickyNoteProcessor.processLinks(stickyNote, true);
+        stickyNoteProcessor.processTags(stickyNote, true);
         return stickyNoteRepository.save(stickyNote);
     }
 
@@ -57,6 +56,9 @@ public class StickyNoteServiceImpl implements StickyNoteService {
     @Recordable(modelType = ModelType.STICKY_NOTE, actionType = ActionType.UPDATE)
     public StickyNote updateStickyNote(StickyNote stickyNote) {
         if (stickyNoteRepository.existsById(stickyNote.getId())) {
+
+            stickyNoteProcessor.processLinks(stickyNote, false);
+            stickyNoteProcessor.processTags(stickyNote, false);
             return stickyNoteRepository.save(stickyNote);
         } else {
             throw new NoSuchStickyNoteException("No sticky note found for ID " + stickyNote.getId());
