@@ -4,7 +4,7 @@ services:
     image: postgres:18.0
     hostname: postgresql
     volumes:
-      - ./data/postgresql:/var/lib/postgresql/18/docker
+      - data-postgresql:/var/lib/postgresql/18/docker
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -45,6 +45,7 @@ services:
     hostname: springboot-note-categorizer
     environment:
       - KAFKA_BOOTSTRAP_SERVERS=kafka1:29092
+      - AWS_BEARER_TOKEN_BEDROCK=${AWS_BEARER_TOKEN_BEDROCK}
     restart: no
     depends_on:
       - kafka1
@@ -201,7 +202,7 @@ services:
     image: mongo:8.0.15
     hostname: mongo
     volumes:
-      - ./data/mongo:/data/db
+      - data-mongo:/data/db
       - ./docker/mongo/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     environment:
       - MONGO_INITDB_DATABASE=playground
@@ -223,7 +224,7 @@ services:
       - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
       - OPENSEARCH_INITIAL_ADMIN_PASSWORD=osPass@28g
     volumes:
-      - ./data/opensearch1:/usr/share/opensearch/data
+      - data-opensearch1:/usr/share/opensearch/data
     ports:
       - "9200:9200"
       - "9600:9600"
@@ -241,7 +242,7 @@ services:
       - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
       - OPENSEARCH_INITIAL_ADMIN_PASSWORD=osPass@28g
     volumes:
-      - ./data/opensearch2:/usr/share/opensearch/data
+      - data-opensearch2:/usr/share/opensearch/data
     restart: no
 
   opensearch-dashboards:
@@ -255,3 +256,9 @@ services:
     depends_on:
       - opensearch1
       - opensearch2
+
+volumes:
+  data-postgresql:
+  data-mongo:
+  data-opensearch1:
+  data-opensearch2:
