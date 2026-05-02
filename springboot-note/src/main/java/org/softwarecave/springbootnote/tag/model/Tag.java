@@ -20,9 +20,9 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "tag")
 public class Tag {
+    @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tag_seq")
     @SequenceGenerator(name = "tag_seq", sequenceName = "tag_seq", allocationSize = 1)
-    @Id
     @Column(name = "id")
     @EqualsAndHashCode.Exclude
     private Long id;

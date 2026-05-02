@@ -27,6 +27,7 @@ public class StickyNoteTag {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sticky_note_tag_seq")
     @SequenceGenerator(name = "sticky_note_tag_seq", sequenceName = "sticky_note_tag_seq", allocationSize = 1)
+    @EqualsAndHashCode.Exclude
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

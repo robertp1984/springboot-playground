@@ -17,13 +17,12 @@ public class StickyNoteProcessor {
     private final StickyNoteTagRepository stickyNoteTagRepository;
     private final TagRepository tagRepository;
 
-    StickyNoteProcessor(StickyNoteLinkRepository stickyNoteLinkRepository,
+    public StickyNoteProcessor(StickyNoteLinkRepository stickyNoteLinkRepository,
                         StickyNoteTagRepository stickyNoteTagRepository,
                         TagRepository tagRepository) {
         this.stickyNoteLinkRepository = stickyNoteLinkRepository;
         this.stickyNoteTagRepository = stickyNoteTagRepository;
         this.tagRepository = tagRepository;
-
     }
 
     void processLinks(StickyNote stickyNote, boolean isAddNewStickyNote) {
@@ -38,7 +37,7 @@ public class StickyNoteProcessor {
                     throw new StickyNoteValidationException("Sticky note id already exists");
                 }
                 StickyNoteLink linkFromDB = stickyNoteLinkRepository.findById(link.getId())
-                        .orElseThrow(() -> new NoSuchStickyNoteException("No sticky note found for ID " + link.getId()));
+                        .orElseThrow(() -> new NoSuchStickyNoteException("No sticky note found for id " + link.getId()));
                 if (!linkFromDB.getStickyNote().getId().equals(stickyNote.getId())) {
                     throw new StickyNoteValidationException("Sticky note id does not match");
                 }
@@ -66,10 +65,10 @@ public class StickyNoteProcessor {
             }
             var existingTagId = tag.getTag().getId();
             if (existingTagId == null) {
-                throw new NoSuchTagException("No tag found for ID " + existingTagId);
+                throw new NoSuchTagException("No tag found for id " + existingTagId);
             }
             var existingTagFromDB = tagRepository.findById(existingTagId);
-            tag.setTag(existingTagFromDB.orElseThrow(() -> new NoSuchTagException("No tag found for ID " + existingTagId)));
+            tag.setTag(existingTagFromDB.orElseThrow(() -> new NoSuchTagException("No tag found for id " + existingTagId)));
         }
     }
 
