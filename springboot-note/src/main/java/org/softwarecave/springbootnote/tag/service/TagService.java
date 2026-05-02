@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -18,10 +19,12 @@ public class TagService {
         this.tagRepository = tagRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<Tag> getTags() {
         return tagRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public Tag getTagById(Long id) {
         if (id == null) {
             throw new NoSuchTagException("No tag id provided");
@@ -31,6 +34,7 @@ public class TagService {
     }
 
     public Tag addTag(Tag tag) {
+        Objects.requireNonNull(tag);
         if (tag.getId() != null) {
             throw new IllegalArgumentException("Tag already exists");
         }
@@ -38,6 +42,7 @@ public class TagService {
     }
 
     public Tag updateTag(Tag tag) {
+        Objects.requireNonNull(tag);
         if (tagRepository.existsById(tag.getId())) {
             return tagRepository.save(tag);
         } else {
@@ -53,7 +58,9 @@ public class TagService {
         }
     }
 
+    @Transactional(readOnly = true)
     public Optional<Tag> getTagByName(String name) {
+        Objects.requireNonNull(name);
         return tagRepository.findByName(name);
     }
 }

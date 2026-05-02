@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.softwarecave.springbootnote.note.model.StickyNote;
 import org.softwarecave.springbootnote.note.model.StickyNoteLink;
 import org.softwarecave.springbootnote.note.model.StickyNoteTag;
+import org.softwarecave.springbootnote.note.model.StickyNoteValidationException;
 import org.softwarecave.springbootnote.note.model.Type;
 import org.softwarecave.springbootnote.note.service.StickyNoteService;
 import org.softwarecave.springbootnote.tag.model.Tag;
@@ -64,7 +65,7 @@ public class StickyNoteServiceIntegrationTest {
     public void addStickyNote_PopulatedId() {
         var stickyNote = createStickyNoteWithoutLinksAndTags();
         stickyNote.setId(5L);
-        assertThrows(IllegalArgumentException.class, () -> stickyNoteService.addStickyNote(stickyNote));
+        assertThrows(StickyNoteValidationException.class, () -> stickyNoteService.addStickyNote(stickyNote));
     }
 
     @Test

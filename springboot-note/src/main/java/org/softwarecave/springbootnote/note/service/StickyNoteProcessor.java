@@ -10,8 +10,10 @@ import org.softwarecave.springbootnote.tag.service.TagRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class StickyNoteProcessor {
     private final StickyNoteLinkRepository stickyNoteLinkRepository;
     private final StickyNoteTagRepository stickyNoteTagRepository;
@@ -26,6 +28,7 @@ public class StickyNoteProcessor {
     }
 
     void processLinks(StickyNote stickyNote, boolean isAddNewStickyNote) {
+        Objects.requireNonNull(stickyNote);
         if (stickyNote.getLinks() == null) {
             return;
         }
@@ -37,7 +40,7 @@ public class StickyNoteProcessor {
                     throw new StickyNoteValidationException("Sticky note id already exists");
                 }
                 StickyNoteLink linkFromDB = stickyNoteLinkRepository.findById(link.getId())
-                        .orElseThrow(() -> new NoSuchStickyNoteException("No sticky note found for id " + link.getId()));
+                        .orElseThrow(() -> new NoSuchStickyNoteException("Sticky note link does not exist for id " + link.getId()));
                 if (!linkFromDB.getStickyNote().getId().equals(stickyNote.getId())) {
                     throw new StickyNoteValidationException("Sticky note id does not match");
                 }
@@ -47,6 +50,7 @@ public class StickyNoteProcessor {
     }
 
     void processTags(StickyNote stickyNote, boolean isAddNewStickyNote) {
+        Objects.requireNonNull(stickyNote);
         if (stickyNote.getTags() == null) {
             return;
         }
@@ -63,10 +67,10 @@ public class StickyNoteProcessor {
                     throw new StickyNoteValidationException("Sticky note id does not match");
                 }
             }
-            var existingTagId = tag.getTag().getId();
-            if (existingTagId == null) {
-                throw new NoSuchTagException("No tag found for id " + existingTagId);
+            if (tag.getTag() == null || tag.getTag().getId() == null) {
+                throw new NoSuchTagException("Missing tag reference or tag id for sticky note tag " + tag);
             }
+            var existingTagId = tag.getTag().getId();
             var existingTagFromDB = tagRepository.findById(existingTagId);
             tag.setTag(existingTagFromDB.orElseThrow(() -> new NoSuchTagException("No tag found for id " + existingTagId)));
         }

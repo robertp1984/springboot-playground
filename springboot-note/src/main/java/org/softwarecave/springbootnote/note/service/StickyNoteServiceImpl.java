@@ -1,20 +1,20 @@
 package org.softwarecave.springbootnote.note.service;
 
-import lombok.extern.slf4j.Slf4j;
 import org.softwarecave.springbootnote.note.model.NoSuchStickyNoteException;
 import org.softwarecave.springbootnote.note.model.StickyNote;
+import org.softwarecave.springbootnote.note.model.StickyNoteValidationException;
 import org.softwarecave.springbootnote.notification.ActionType;
 import org.softwarecave.springbootnote.notification.ModelType;
 import org.softwarecave.springbootnote.notification.Recordable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
 @Transactional
-@Slf4j
 public class StickyNoteServiceImpl implements StickyNoteService {
 
     private final StickyNoteRepository stickyNoteRepository;
@@ -27,14 +27,16 @@ public class StickyNoteServiceImpl implements StickyNoteService {
     }
 
     @Override
-    public Collection<StickyNote> getStickyNotes() {
+    @Transactional(readOnly = true)
+    public List<StickyNote> getStickyNotes() {
         return stickyNoteRepository.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public StickyNote getStickyNoteById(Long stickyNoteId) throws NoSuchStickyNoteException {
         if (stickyNoteId == null) {
-            throw new NoSuchStickyNoteException("No sticky note id provided");
+            throw new StickyNoteValidationException("No sticky note id provided");
         }
         Optional<StickyNote> stickyNote = stickyNoteRepository.findById(stickyNoteId);
         return stickyNote.orElseThrow(() -> new NoSuchStickyNoteException("No sticky note found for ID " + stickyNoteId));
@@ -43,8 +45,9 @@ public class StickyNoteServiceImpl implements StickyNoteService {
     @Override
     @Recordable(modelType = ModelType.STICKY_NOTE, actionType = ActionType.ADD)
     public StickyNote addStickyNote(StickyNote stickyNote) {
+        Objects.requireNonNull(stickyNote);
         if (stickyNote.getId() != null) {
-            throw new IllegalArgumentException("Sticky note id already exists");
+            throw new StickyNoteValidationException("New sticky note has not null id");
         }
 
         stickyNoteProcessor.processLinks(stickyNote, true);
@@ -55,6 +58,10 @@ public class StickyNoteServiceImpl implements StickyNoteService {
     @Override
     @Recordable(modelType = ModelType.STICKY_NOTE, actionType = ActionType.UPDATE)
     public StickyNote updateStickyNote(StickyNote stickyNote) {
+        Objects.requireNonNull(stickyNote);
+        if (stickyNote.getId() == null) {
+            throw new StickyNoteValidationException("Sticky note to update has null id");
+        }
         if (stickyNoteRepository.existsById(stickyNote.getId())) {
 
             stickyNoteProcessor.processLinks(stickyNote, false);
@@ -69,7 +76,7 @@ public class StickyNoteServiceImpl implements StickyNoteService {
     @Recordable(modelType = ModelType.STICKY_NOTE, actionType = ActionType.DELETE)
     public void deleteStickyNote(Long stickyNoteId) {
         if (stickyNoteId == null) {
-            throw new NoSuchStickyNoteException("No sticky note id provided");
+            throw new StickyNoteValidationException("No sticky note id provided");
         }
         if (stickyNoteRepository.existsById(stickyNoteId)) {
             stickyNoteRepository.deleteById(stickyNoteId);

@@ -1,6 +1,7 @@
 package org.softwarecave.springbootnote.config.web;
 
 import org.softwarecave.springbootnote.note.model.NoSuchStickyNoteException;
+import org.softwarecave.springbootnote.note.model.StickyNoteValidationException;
 import org.softwarecave.springbootnote.tag.model.NoSuchTagException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -15,12 +16,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class WebControllerAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler
-    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex, WebRequest request) {
+    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
         return ResponseEntity.badRequest().contentType(MediaType.TEXT_PLAIN).body(ex.getMessage());
     }
 
     @ExceptionHandler
-    public ResponseEntity<String> handleNoSuchStickyNoteException(NoSuchStickyNoteException ex, WebRequest request) {
+    public ResponseEntity<String> handleNoSuchStickyNoteException(NoSuchStickyNoteException ex) {
         return ResponseEntity.notFound().build();
     }
 
@@ -30,8 +31,13 @@ public class WebControllerAdvice extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<String> handleNoSuchTagException(NoSuchTagException ex, WebRequest request) {
+    public ResponseEntity<String> handleNoSuchTagException(NoSuchTagException ex) {
         return ResponseEntity.notFound().build();
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<String> handleStickyNoteValidationException(StickyNoteValidationException ex) {
+        return ResponseEntity.badRequest().contentType(MediaType.TEXT_PLAIN).body(ex.getMessage());
     }
 
 }
