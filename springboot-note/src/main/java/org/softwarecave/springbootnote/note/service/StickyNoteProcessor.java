@@ -20,15 +20,17 @@ public class StickyNoteProcessor {
     private final TagRepository tagRepository;
 
     public StickyNoteProcessor(StickyNoteLinkRepository stickyNoteLinkRepository,
-                        StickyNoteTagRepository stickyNoteTagRepository,
-                        TagRepository tagRepository) {
+                               StickyNoteTagRepository stickyNoteTagRepository,
+                               TagRepository tagRepository) {
         this.stickyNoteLinkRepository = stickyNoteLinkRepository;
         this.stickyNoteTagRepository = stickyNoteTagRepository;
         this.tagRepository = tagRepository;
     }
 
     void processLinks(StickyNote stickyNote, boolean isAddNewStickyNote) {
-        Objects.requireNonNull(stickyNote);
+        if (stickyNote == null) {
+            throw new StickyNoteValidationException("Sticky note must not be null");
+        }
         if (stickyNote.getLinks() == null) {
             return;
         }
@@ -50,7 +52,9 @@ public class StickyNoteProcessor {
     }
 
     void processTags(StickyNote stickyNote, boolean isAddNewStickyNote) {
-        Objects.requireNonNull(stickyNote);
+        if (stickyNote == null) {
+            throw new StickyNoteValidationException("Sticky note must not be null");
+        }
         if (stickyNote.getTags() == null) {
             return;
         }
