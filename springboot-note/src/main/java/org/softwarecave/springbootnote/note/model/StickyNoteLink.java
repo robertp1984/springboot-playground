@@ -11,12 +11,12 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -24,15 +24,12 @@ import lombok.ToString;
 public class StickyNoteLink {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "sticky_note_link_seq", sequenceName = "sticky_note_link_seq",  allocationSize = 1)
+    @SequenceGenerator(name = "sticky_note_link_seq", sequenceName = "sticky_note_link_seq", allocationSize = 1)
     @Column(name = "id")
-    @EqualsAndHashCode.Exclude
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "sticky_note_id")
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     private StickyNote stickyNote;
 
     @Column(name = "link")

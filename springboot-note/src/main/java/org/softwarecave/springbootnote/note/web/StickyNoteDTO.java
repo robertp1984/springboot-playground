@@ -20,9 +20,11 @@ public class StickyNoteDTO {
     @EqualsAndHashCode.Exclude
     private Long id;
 
+    @NotNull
     @NotBlank
     private String title;
 
+    @NotNull
     @NotBlank
     private String body;
 

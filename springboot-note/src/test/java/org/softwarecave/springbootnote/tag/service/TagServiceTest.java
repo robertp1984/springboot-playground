@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.softwarecave.springbootnote.tag.model.NoSuchTagException;
 import org.softwarecave.springbootnote.tag.model.Tag;
+import org.softwarecave.springbootnote.tag.model.TagValidationException;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,7 +39,7 @@ class TagServiceTest {
 
     @Test
     void getTagById_nullId_throws() {
-        assertThrows(NoSuchTagException.class, () -> tagService.getTagById(null));
+        assertThrows(TagValidationException.class, () -> tagService.getTagById(null));
     }
 
     @Test
@@ -64,7 +65,7 @@ class TagServiceTest {
     void addTag_withId_throws() {
         var tag = new Tag(1L, "n", "d");
 
-        assertThrows(IllegalArgumentException.class, () -> tagService.addTag(tag));
+        assertThrows(TagValidationException.class, () -> tagService.addTag(tag));
         verify(tagRepository, never()).save(any());
     }
 
@@ -83,42 +84,43 @@ class TagServiceTest {
     @Test
     void updateTag_exists_savesAndReturns() {
         var tag = new Tag(7L, "u", "ud");
-        when(tagRepository.existsById(7L)).thenReturn(true);
+        when(tagRepository.findById(7L)).thenReturn(Optional.of(tag));
         when(tagRepository.save(tag)).thenReturn(tag);
 
         var result = tagService.updateTag(tag);
 
         assertEquals(tag, result);
-        verify(tagRepository).existsById(7L);
+        verify(tagRepository).findById(7L);
         verify(tagRepository).save(tag);
     }
 
     @Test
     void updateTag_notExists_throws() {
         var tag = new Tag(8L, "u", "ud");
-        when(tagRepository.existsById(8L)).thenReturn(false);
+        when(tagRepository.findById(8L)).thenReturn(Optional.empty());
 
         assertThrows(NoSuchTagException.class, () -> tagService.updateTag(tag));
-        verify(tagRepository).existsById(8L);
+        verify(tagRepository).findById(8L);
         verify(tagRepository, never()).save(any());
     }
 
     @Test
     void deleteTag_exists_deletes() {
-        when(tagRepository.existsById(3L)).thenReturn(true);
-        doNothing().when(tagRepository).deleteById(3L);
+        Tag tag = new Tag(3L, "aa", "bb");
+        when(tagRepository.findById(3L)).thenReturn(Optional.of(tag));
+        doNothing().when(tagRepository).delete(tag);
 
         assertDoesNotThrow(() -> tagService.deleteTag(3L));
-        verify(tagRepository).existsById(3L);
-        verify(tagRepository).deleteById(3L);
+        verify(tagRepository).findById(3L);
+        verify(tagRepository).delete(tag);
     }
 
     @Test
     void deleteTag_notExists_throws() {
-        when(tagRepository.existsById(4L)).thenReturn(false);
+        when(tagRepository.findById(4L)).thenReturn(Optional.empty());
 
         assertThrows(NoSuchTagException.class, () -> tagService.deleteTag(4L));
-        verify(tagRepository).existsById(4L);
+        verify(tagRepository).findById(4L);
         verify(tagRepository, never()).deleteById(anyLong());
     }
 }
