@@ -1,6 +1,5 @@
 package org.softwarecave.springbootnote.config.security;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -14,7 +13,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import javax.sql.DataSource;
 
 @Configuration
-@Slf4j
 public class SecurityConfiguration {
 
     public static final String ACTUATOR_VIEWER = "ACTUATOR_VIEWER";
@@ -50,7 +48,7 @@ public class SecurityConfiguration {
                 .requestMatchers(HttpMethod.GET, "/actuator/health").permitAll()
                 .requestMatchers(HttpMethod.GET, "/actuator", "/actuator/**").hasRole(ACTUATOR_VIEWER)
                 // application endpoints
-                .requestMatchers(API_V1_HELLO_BASE).anonymous()
+                .requestMatchers(API_V1_HELLO_BASE).permitAll()
                 // sticky notes
                 .requestMatchers(HttpMethod.GET, API_V1_STICKY_NOTES_BASE, API_V1_STICKY_NOTES_ALL).hasRole(STICKY_NOTES_VIEWER)
                 .requestMatchers(HttpMethod.POST, API_V1_STICKY_NOTES_BASE).hasRole(STICKY_NOTES_MANAGER)

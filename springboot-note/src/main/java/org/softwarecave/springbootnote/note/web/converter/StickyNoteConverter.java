@@ -4,11 +4,13 @@ import org.softwarecave.springbootnote.note.model.StickyNote;
 import org.softwarecave.springbootnote.note.web.StickyNoteDTO;
 import org.softwarecave.springbootnote.note.web.StickyNoteLinkDTO;
 import org.softwarecave.springbootnote.note.web.StickyNoteTagDTO;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Component
 public class StickyNoteConverter {
     public StickyNoteDTO convertToDTO(StickyNote note) {
         StickyNoteLinkConverter linkConverter = new StickyNoteLinkConverter(note);

@@ -32,13 +32,14 @@ public class JsonKafkaStickyNoteProducer implements KafkaStickyNoteProducer {
     private final StickyNoteConverter stickyNoteConverter;
 
     public JsonKafkaStickyNoteProducer(JsonMapper jsonMapper,
+                                       StickyNoteConverter stickyNoteConverter,
                                        @Value("${app.kafka.bootstrap-servers}") String bootstrapServers,
                                        @Value("${app.kafka.json.stickynote-topic}") String noteTopic) {
         this.jsonMapper = jsonMapper;
         this.bootstrapServers = bootstrapServers;
         this.noteTopic = noteTopic;
 
-        this.stickyNoteConverter = new StickyNoteConverter();
+        this.stickyNoteConverter = stickyNoteConverter;
     }
 
     @PostConstruct

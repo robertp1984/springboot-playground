@@ -28,9 +28,10 @@ public class StickyNoteController {
     private final StickyNoteService stickyNoteService;
     private final StickyNoteConverter converter;
 
-    public StickyNoteController(StickyNoteService stickyNoteService) {
+    public StickyNoteController(StickyNoteService stickyNoteService,
+                                StickyNoteConverter converter) {
         this.stickyNoteService = stickyNoteService;
-        converter = new StickyNoteConverter();
+        this.converter = converter;
     }
 
     @GetMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -41,14 +42,13 @@ public class StickyNoteController {
     }
 
     @GetMapping(path = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public StickyNoteDTO getStickyNotes(@PathVariable("id") Long id) {
+    public StickyNoteDTO getStickyNote(@PathVariable("id") Long id) {
         var stickyNote = stickyNoteService.getStickyNoteById(id);
 
         return converter.convertToDTO(stickyNote);
     }
 
     @PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<StickyNoteDTO> addStickyNote(@Valid @RequestBody StickyNoteDTO stickyNoteDTO) {
         var stickyNote = converter.convertToEntity(stickyNoteDTO);
 

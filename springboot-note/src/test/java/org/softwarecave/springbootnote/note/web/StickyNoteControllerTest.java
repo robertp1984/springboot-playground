@@ -1,17 +1,20 @@
 package org.softwarecave.springbootnote.note.web;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Answers;
 import org.mockito.ArgumentCaptor;
 import org.softwarecave.springbootnote.config.security.SecurityConfiguration;
 import org.softwarecave.springbootnote.note.model.NoSuchStickyNoteException;
 import org.softwarecave.springbootnote.note.model.StickyNote;
 import org.softwarecave.springbootnote.note.model.Type;
 import org.softwarecave.springbootnote.note.service.StickyNoteService;
+import org.softwarecave.springbootnote.note.web.converter.StickyNoteConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.web.servlet.MockMvc;
 import tools.jackson.databind.json.JsonMapper;
 
@@ -40,6 +43,9 @@ public class StickyNoteControllerTest {
 
     @MockitoBean
     private StickyNoteService stickyNoteService;
+
+    @MockitoBean(answers = Answers.CALLS_REAL_METHODS)
+    private StickyNoteConverter stickyNoteConverter;
 
     @Autowired
     private JsonMapper jsonMapper;

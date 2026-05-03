@@ -81,7 +81,7 @@ public class TagController {
     public List<TagDTO> getTags(@RequestParam(required = false, value = "name") String name) {
         List<Tag> foundTags;
         if (StringUtils.isNotBlank(name)) {
-            foundTags = tagService.getTagByName(name).stream().filter(Objects::nonNull).toList();
+            foundTags = tagService.getTagByName(name).stream().toList();
         } else {
             foundTags = tagService.getTags();
         }

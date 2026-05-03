@@ -16,15 +16,16 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -34,7 +35,6 @@ public class StickyNote {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "STICKY_NOTE_SEQ")
     @SequenceGenerator(name = "STICKY_NOTE_SEQ", sequenceName = "STICKY_NOTE_SEQ", allocationSize = 1)
     @Column(name = "id")
-    @EqualsAndHashCode.Exclude
     private Long id;
 
     @Column(name = "title")
@@ -51,7 +51,6 @@ public class StickyNote {
     private Type type;
 
     @OneToMany(mappedBy = "stickyNote", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    @EqualsAndHashCode.Exclude
     private List<StickyNoteLink> links = new ArrayList<>();
 
     @OneToMany(mappedBy = "stickyNote", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
