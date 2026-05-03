@@ -28,9 +28,10 @@ public class StickyNoteController {
     private final StickyNoteService stickyNoteService;
     private final StickyNoteConverter converter;
 
-    public StickyNoteController(StickyNoteService stickyNoteService) {
+    public StickyNoteController(StickyNoteService stickyNoteService,
+                                StickyNoteConverter converter) {
         this.stickyNoteService = stickyNoteService;
-        converter = new StickyNoteConverter();
+        this.converter = converter;
     }
 
     @GetMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
