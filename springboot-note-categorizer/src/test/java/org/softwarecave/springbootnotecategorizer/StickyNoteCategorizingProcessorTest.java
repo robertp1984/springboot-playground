@@ -9,6 +9,7 @@ import org.apache.kafka.streams.test.TestRecord;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.softwarecave.springbootnotecategorizer.categorizer.CategorizerFactory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,8 +22,9 @@ public class StickyNoteCategorizingProcessorTest {
 
     @BeforeEach
     public void setup() {
-        StickyNoteCategorizingProcessor app = new StickyNoteCategorizingProcessor("localhost:29092", INPUT_TOPIC, OUTPUT_TOPIC);
-        topologyTestDriver = new TopologyTestDriver(app.createTopology(), app.createConfig());
+        StickyNoteCategorizingProcessor processor = new StickyNoteCategorizingProcessor("localhost:29092", INPUT_TOPIC, OUTPUT_TOPIC,
+                new CategorizerFactory());
+        topologyTestDriver = new TopologyTestDriver(processor.createTopology(), processor.createConfig());
     }
 
     @AfterEach

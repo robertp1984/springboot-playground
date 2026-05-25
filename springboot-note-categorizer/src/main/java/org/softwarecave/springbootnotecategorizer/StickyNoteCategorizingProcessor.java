@@ -24,13 +24,16 @@ public class StickyNoteCategorizingProcessor {
     private final String bootstrapServers;
     private final String inputTopic;
     private final String outputTopic;
+    private final CategorizerFactory categorizerFactory;
 
     public StickyNoteCategorizingProcessor(@Value("${app.kafka.bootstrap-servers}") String bootstrapServers,
                                            @Value("${app.kafka.input-topic}") String inputTopic,
-                                           @Value("${app.kafka.output-topic}") String outputTopic) {
+                                           @Value("${app.kafka.output-topic}") String outputTopic,
+                                           CategorizerFactory categorizerFactory) {
         this.bootstrapServers = bootstrapServers;
         this.inputTopic = inputTopic;
         this.outputTopic = outputTopic;
+        this.categorizerFactory = categorizerFactory;
     }
 
     public void run() throws InterruptedException {
@@ -62,7 +65,7 @@ public class StickyNoteCategorizingProcessor {
     }
 
     Topology createTopology() {
-        Categorizer keywordBasedCategorizer = new CategorizerFactory().getKeywordBasedCategorizer();
+        Categorizer keywordBasedCategorizer = categorizerFactory.getKeywordBasedCategorizer();
 
         StreamsBuilder builder = new StreamsBuilder();
         KStream<Long, String> stickyNoteStream = builder.stream(inputTopic);

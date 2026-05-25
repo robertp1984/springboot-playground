@@ -16,8 +16,8 @@ public class SpringBootNoteCategorizerApp {
     }
 
     @Bean
-    public CommandLineRunner commandLineRunner(StickyNoteCategorizingProcessor app) {
-        return (args) -> app.run();
+    public CommandLineRunner commandLineRunner(StickyNoteCategorizingProcessor processor) {
+        return (args) -> processor.run();
     }
 
 }

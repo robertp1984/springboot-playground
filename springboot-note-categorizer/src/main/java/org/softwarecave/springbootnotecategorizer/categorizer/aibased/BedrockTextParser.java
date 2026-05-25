@@ -42,11 +42,14 @@ public class BedrockTextParser {
         var categoryName = categoryAndScore[0].trim();
         var scoreStr = categoryAndScore[1].trim();
 
-        Category category = Category.valueOf(categoryName);
-        if (category == null) {
+        Category category;
+        try {
+            category = Category.valueOf(categoryName);
+        } catch (IllegalArgumentException ex) {
             log.warn("Skipping invalid category: {}", categoryName);
             return null;
         }
+
         double score;
         try {
             score = Double.parseDouble(scoreStr);

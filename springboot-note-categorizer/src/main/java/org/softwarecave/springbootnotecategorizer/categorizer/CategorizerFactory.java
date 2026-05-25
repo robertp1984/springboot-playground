@@ -3,7 +3,9 @@ package org.softwarecave.springbootnotecategorizer.categorizer;
 import org.softwarecave.springbootnotecategorizer.categorizer.aibased.BedrockBasedCategorizer;
 import org.softwarecave.springbootnotecategorizer.categorizer.keywordbased.KeywordMatrix;
 import org.softwarecave.springbootnotecategorizer.categorizer.keywordbased.SimpleKeywordBasedCategorizer;
+import org.springframework.stereotype.Service;
 
+@Service
 public class CategorizerFactory {
 
     public static final String DEFAULT_KEYWORD_MATRIX_FILENAME = "keyword-matrix.json";
