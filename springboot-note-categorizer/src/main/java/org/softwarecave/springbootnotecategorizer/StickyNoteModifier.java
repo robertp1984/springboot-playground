@@ -37,7 +37,7 @@ public class StickyNoteModifier {
         CategorizerResults categorizerResults = categorizer.categorize(title, body);
         List<String> categoryNames = categorizerResults.getTopKResults(numberOfCategories)
                 .stream()
-                .map(r -> r.getCategory().getName())
+                .map(r -> r.category().getName())
                 .toList();
 
         documentContext.put("$", "categories", categoryNames);

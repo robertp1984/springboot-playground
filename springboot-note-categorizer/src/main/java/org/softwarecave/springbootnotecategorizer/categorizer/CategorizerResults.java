@@ -24,7 +24,7 @@ public class CategorizerResults {
 
     public List<CategorizerResult> getTopKResults(int k) {
         return results.stream()
-                .sorted(Comparator.comparingDouble(CategorizerResult::getScore).reversed())
+                .sorted(Comparator.comparingDouble(CategorizerResult::score).reversed())
                 .limit(k)
                 .toList();
     }

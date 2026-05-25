@@ -6,6 +6,7 @@ import org.softwarecave.springbootnotecategorizer.categorizer.Categorizer;
 import org.softwarecave.springbootnotecategorizer.categorizer.CategorizerFactory;
 import org.softwarecave.springbootnotecategorizer.categorizer.CategorizerResult;
 import org.softwarecave.springbootnotecategorizer.categorizer.CategorizerResults;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class SimpleKeywordBasedCategorizerTest {
             "Dockerizing a Spring Boot application, Use Docker to containerize your Spring Boot application., SPRING|DOCKER"
     })
     public void testCategorizeParams(String title, String body, String expectedCategoriesString) {
-        Categorizer categorizer = new CategorizerFactory().getKeywordBasedCategorizer();
+        Categorizer categorizer = new CategorizerFactory(new JsonMapper()).getKeywordBasedCategorizer();
         CategorizerResults categories = categorizer.categorize(title, body);
         assertThat(categories).isNotNull();
 
@@ -31,8 +32,8 @@ public class SimpleKeywordBasedCategorizerTest {
         List<CategorizerResult> topKResults = categories.getTopKResults(expectedCategoriesCount);
         assertThat(topKResults).hasSize(expectedCategoriesCount);
         for (int i = 0; i < expectedCategoriesCount; i++) {
-            assertThat(topKResults.get(i).getCategory().name()).isEqualTo(expectedCategories[i]);
-            assertThat(topKResults.get(i).getScore()).isGreaterThan(0.2);
+            assertThat(topKResults.get(i).category().name()).isEqualTo(expectedCategories[i]);
+            assertThat(topKResults.get(i).score()).isGreaterThan(0.2);
         }
     }
 

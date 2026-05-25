@@ -10,6 +10,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.softwarecave.springbootnotecategorizer.categorizer.CategorizerFactory;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,7 +24,7 @@ public class StickyNoteCategorizingProcessorTest {
     @BeforeEach
     public void setup() {
         StickyNoteCategorizingProcessor processor = new StickyNoteCategorizingProcessor("localhost:29092", INPUT_TOPIC, OUTPUT_TOPIC,
-                new CategorizerFactory());
+                new CategorizerFactory(new JsonMapper()));
         topologyTestDriver = new TopologyTestDriver(processor.createTopology(), processor.createConfig());
     }
 
