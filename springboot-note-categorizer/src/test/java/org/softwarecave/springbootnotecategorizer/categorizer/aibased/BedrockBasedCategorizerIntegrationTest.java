@@ -1,4 +1,4 @@
-package org.softwarecave.springbootnotecategorizer.categorizer.aibasedcategorizer;
+package org.softwarecave.springbootnotecategorizer.categorizer.aibased;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -7,6 +7,7 @@ import org.softwarecave.springbootnotecategorizer.categorizer.Categorizer;
 import org.softwarecave.springbootnotecategorizer.categorizer.CategorizerFactory;
 import org.softwarecave.springbootnotecategorizer.categorizer.CategorizerResult;
 import org.softwarecave.springbootnotecategorizer.categorizer.CategorizerResults;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class BedrockBasedCategorizerIntegrationTest {
     })
     @Disabled("Temporarily disabled not to incur large costs in AWS")
     public void testCategorizeParams(String title, String body, String expectedCategoriesString) {
-        Categorizer categorizer = new CategorizerFactory().getBedrockBasedCategorizer();
+        Categorizer categorizer = new CategorizerFactory(new JsonMapper()).getBedrockBasedCategorizer();
         CategorizerResults categories = categorizer.categorize(title, body);
         assertThat(categories).isNotNull();
 
@@ -38,8 +39,8 @@ public class BedrockBasedCategorizerIntegrationTest {
         List<CategorizerResult> topKResults = categories.getTopKResults(expectedCategoriesCount);
         assertThat(topKResults).hasSize(expectedCategoriesCount);
         for (int i = 0; i < expectedCategoriesCount; i++) {
-            assertThat(topKResults.get(i).getCategory().name()).isIn(expectedCategories);
-            assertThat(topKResults.get(i).getScore()).isGreaterThan(0.2);
+            assertThat(topKResults.get(i).category().name()).isIn(expectedCategories);
+            assertThat(topKResults.get(i).score()).isGreaterThan(0.2);
         }
     }
 

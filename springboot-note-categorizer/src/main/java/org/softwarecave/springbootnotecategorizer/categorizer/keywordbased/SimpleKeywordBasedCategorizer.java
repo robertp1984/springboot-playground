@@ -3,13 +3,7 @@ package org.softwarecave.springbootnotecategorizer.categorizer.keywordbased;
 import org.softwarecave.springbootnotecategorizer.categorizer.Categorizer;
 import org.softwarecave.springbootnotecategorizer.categorizer.CategorizerResults;
 
-public class SimpleKeywordBasedCategorizer implements Categorizer {
-
-    private final KeywordMatrix keywordMatrix;
-
-    public SimpleKeywordBasedCategorizer(KeywordMatrix keywordMatrix) {
-        this.keywordMatrix = keywordMatrix;
-    }
+public record SimpleKeywordBasedCategorizer(KeywordMatrix keywordMatrix) implements Categorizer {
 
     @Override
     public CategorizerResults categorize(String title, String body) {

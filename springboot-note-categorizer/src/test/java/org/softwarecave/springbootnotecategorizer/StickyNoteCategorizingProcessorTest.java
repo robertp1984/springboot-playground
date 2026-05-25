@@ -4,23 +4,28 @@ import org.apache.kafka.common.serialization.LongDeserializer;
 import org.apache.kafka.common.serialization.LongSerializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
-import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.TopologyTestDriver;
 import org.apache.kafka.streams.test.TestRecord;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.softwarecave.springbootnotecategorizer.categorizer.CategorizerFactory;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class StickyNoteCategorizerAppTest {
+public class StickyNoteCategorizingProcessorTest {
+
+    private static final String INPUT_TOPIC = "input-topic";
+    private static final String OUTPUT_TOPIC = "output-topic";
 
     private TopologyTestDriver topologyTestDriver;
 
     @BeforeEach
     public void setup() {
-        StickyNoteCategorizerApp app = new StickyNoteCategorizerApp("localhost:29092", Main.INPUT_TOPIC, Main.OUTPUT_TOPIC);
-        topologyTestDriver = new TopologyTestDriver(app.createTopology(), app.createConfig());
+        StickyNoteCategorizingProcessor processor = new StickyNoteCategorizingProcessor("localhost:29092", INPUT_TOPIC, OUTPUT_TOPIC,
+                new CategorizerFactory(new JsonMapper()));
+        topologyTestDriver = new TopologyTestDriver(processor.createTopology(), processor.createConfig());
     }
 
     @AfterEach
@@ -30,8 +35,8 @@ public class StickyNoteCategorizerAppTest {
 
     @Test
     public void testForTwoRecords() {
-        var inputTopic = topologyTestDriver.createInputTopic(Main.INPUT_TOPIC, new LongSerializer(), new StringSerializer());
-        var outputTopic = topologyTestDriver.createOutputTopic(Main.OUTPUT_TOPIC, new LongDeserializer(), new StringDeserializer());
+        var inputTopic = topologyTestDriver.createInputTopic(INPUT_TOPIC, new LongSerializer(), new StringSerializer());
+        var outputTopic = topologyTestDriver.createOutputTopic(OUTPUT_TOPIC, new LongDeserializer(), new StringDeserializer());
 
         inputTopic.pipeInput(1L, createSampleCloudNote());
         inputTopic.pipeInput(2L, createSampleKafkaNote());

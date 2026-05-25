@@ -25,8 +25,8 @@ public class BedrockBasedCategorizer implements Categorizer {
     private final JsonMapper jsonMapper;
     private final String allCategoriesString;
 
-    public BedrockBasedCategorizer() {
-        jsonMapper = new JsonMapper();
+    public BedrockBasedCategorizer(JsonMapper jsonMapper) {
+        this.jsonMapper = jsonMapper;
         allCategoriesString = Arrays.stream(Category.values())
                 .map(Category::name)
                 .collect(Collectors.joining(", "));
