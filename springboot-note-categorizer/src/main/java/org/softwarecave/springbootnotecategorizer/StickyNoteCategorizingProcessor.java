@@ -11,18 +11,23 @@ import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Produced;
 import org.softwarecave.springbootnotecategorizer.categorizer.Categorizer;
 import org.softwarecave.springbootnotecategorizer.categorizer.CategorizerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
 
 @Slf4j
-public class StickyNoteCategorizerApp {
+@Service
+public class StickyNoteCategorizingProcessor {
 
     private final String bootstrapServers;
     private final String inputTopic;
     private final String outputTopic;
 
-    public StickyNoteCategorizerApp(String bootstrapServers, String inputTopic, String outputTopic) {
+    public StickyNoteCategorizingProcessor(@Value("${app.kafka.bootstrap-servers}") String bootstrapServers,
+                                           @Value("${app.kafka.input-topic}") String inputTopic,
+                                           @Value("${app.kafka.output-topic}") String outputTopic) {
         this.bootstrapServers = bootstrapServers;
         this.inputTopic = inputTopic;
         this.outputTopic = outputTopic;
