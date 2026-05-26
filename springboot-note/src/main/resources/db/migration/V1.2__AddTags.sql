@@ -1,5 +1,5 @@
 CREATE TABLE tag (
-    id NUMERIC(20) PRIMARY KEY,
+    id BIGINT PRIMARY KEY,
     name VARCHAR(1024) NOT NULL UNIQUE,
     description VARCHAR(1024) NOT NULL
 );
@@ -9,9 +9,9 @@ CREATE UNIQUE INDEX tag_name_idx ON tag(name);
 -----
 
 CREATE TABLE sticky_note_tag (
-    id NUMERIC(20) PRIMARY KEY,
-    sticky_note_id NUMERIC(20) NOT NULL,
-    tag_id NUMERIC(20) NOT NULL,
+    id BIGINT PRIMARY KEY,
+    sticky_note_id BIGINT NOT NULL,
+    tag_id BIGINT NOT NULL,
     CONSTRAINT sticky_note_tag_sticky_note_id_fk FOREIGN KEY (sticky_note_id) REFERENCES sticky_note(id),
     CONSTRAINT sticky_note_tag_tag_id_fk FOREIGN KEY (tag_id) REFERENCES tag(id)
 );
@@ -21,7 +21,7 @@ CREATE INDEX sticky_note_tag_tag_id_idx ON sticky_note_tag(tag_id);
 
 -----
 
-CREATE OR REPLACE FUNCTION add_tag(name VARCHAR, description VARCHAR) RETURNS NUMERIC AS $$
+CREATE OR REPLACE FUNCTION add_tag(name VARCHAR, description VARCHAR) RETURNS BIGINT AS $$
     DECLARE
     BEGIN
         INSERT INTO tag(id, name, description) VALUES(nextval('tag_seq'), name, description);
