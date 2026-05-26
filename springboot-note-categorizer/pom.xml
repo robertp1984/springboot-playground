@@ -9,12 +9,18 @@
         <version>4.0.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
     <groupId>org.softwarecave</groupId>
     <artifactId>springboot-note-categorizer</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>springboot-note-categorizer</name>
     <description>SpringBoot Note Categorizer application to test various technologies</description>
 
+    <developers>
+        <developer>
+            <name>Robert Piasecki</name>
+        </developer>
+    </developers>
 
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
@@ -129,4 +135,13 @@
             </plugin>
         </plugins>
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/robertp1984/springboot-playground</url>
+        </repository>
+    </distributionManagement>
+
 </project>

@@ -8,6 +8,7 @@
     <name>springboot-playground</name>
     <description>SpringBoot Playground application to test various technologies</description>
     <packaging>pom</packaging>
+
     <properties>
         <java.version>25</java.version>
     </properties>

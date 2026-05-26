@@ -11,6 +11,12 @@
 
     <artifactId>springboot-note-common</artifactId>
 
+    <developers>
+        <developer>
+            <name>Robert Piasecki</name>
+        </developer>
+    </developers>
+
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
