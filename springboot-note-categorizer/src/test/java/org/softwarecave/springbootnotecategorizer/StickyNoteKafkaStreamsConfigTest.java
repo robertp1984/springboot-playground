@@ -4,7 +4,9 @@ import org.apache.kafka.common.serialization.LongDeserializer;
 import org.apache.kafka.common.serialization.LongSerializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.TopologyTestDriver;
+import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.test.TestRecord;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,9 +14,11 @@ import org.junit.jupiter.api.Test;
 import org.softwarecave.springbootnotecategorizer.categorizer.CategorizerFactory;
 import tools.jackson.databind.json.JsonMapper;
 
+import java.util.Properties;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class StickyNoteCategorizingProcessorTest {
+public class StickyNoteKafkaStreamsConfigTest {
 
     private static final String INPUT_TOPIC = "input-topic";
     private static final String OUTPUT_TOPIC = "output-topic";
@@ -23,9 +27,14 @@ public class StickyNoteCategorizingProcessorTest {
 
     @BeforeEach
     public void setup() {
-        StickyNoteCategorizingProcessor processor = new StickyNoteCategorizingProcessor("localhost:29092", INPUT_TOPIC, OUTPUT_TOPIC,
-                new CategorizerFactory(new JsonMapper()));
-        topologyTestDriver = new TopologyTestDriver(processor.createTopology(), processor.createConfig());
+        StickyNoteKafkaStreamsConfig processor = new StickyNoteKafkaStreamsConfig();
+
+        Properties kafkaStreamsConfig = processor.kafkaStreamsConfig("localhost:29092").asProperties();
+
+        StreamsBuilder streamsBuilder = new StreamsBuilder();
+        KStream<Long, String> kafkaStream = processor.kafkaStream(INPUT_TOPIC, OUTPUT_TOPIC, new CategorizerFactory(new JsonMapper()), streamsBuilder);
+
+        topologyTestDriver = new TopologyTestDriver(streamsBuilder.build(), kafkaStreamsConfig);
     }
 
     @AfterEach
