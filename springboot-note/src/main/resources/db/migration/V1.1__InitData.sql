@@ -1,13 +1,13 @@
-CREATE OR REPLACE FUNCTION add_sticky_note(title VARCHAR, body VARCHAR, type VARCHAR) RETURNS NUMERIC AS $$
+CREATE OR REPLACE FUNCTION add_sticky_note(title VARCHAR, body VARCHAR, type VARCHAR) RETURNS BIGINT AS $$
     BEGIN
         INSERT INTO sticky_note(id, title, body, type, created) VALUES(nextval('sticky_note_seq'), title, body, type, CURRENT_TIMESTAMP);
         RETURN currval('sticky_note_seq');
     END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION add_sticky_note_link(sticky_note_title VARCHAR, link VARCHAR) RETURNS NUMERIC AS $$
+CREATE OR REPLACE FUNCTION add_sticky_note_link(sticky_note_title VARCHAR, link VARCHAR) RETURNS BIGINT AS $$
     DECLARE
-        sticky_note_id NUMERIC;
+        sticky_note_id BIGINT;
     BEGIN
         SELECT id INTO sticky_note_id FROM sticky_note WHERE title=sticky_note_title;
         INSERT INTO sticky_note_link(id, sticky_note_id, link) VALUES(nextval('sticky_note_link_seq'), sticky_note_id, link);
@@ -16,7 +16,7 @@ CREATE OR REPLACE FUNCTION add_sticky_note_link(sticky_note_title VARCHAR, link 
 $$ LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION add_user(username VARCHAR, firstname VARCHAR, lastname VARCHAR, password VARCHAR) RETURNS NUMERIC AS $$
+CREATE OR REPLACE FUNCTION add_user(username VARCHAR, firstname VARCHAR, lastname VARCHAR, password VARCHAR) RETURNS BIGINT AS $$
     DECLARE
     BEGIN
         INSERT INTO users(id, username, password, enabled, first_name, last_name) VALUES(nextval('users_seq'), username, password, 1, firstname, lastname);
@@ -24,7 +24,7 @@ CREATE OR REPLACE FUNCTION add_user(username VARCHAR, firstname VARCHAR, lastnam
         END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION add_role(rolename VARCHAR) RETURNS NUMERIC AS $$
+CREATE OR REPLACE FUNCTION add_role(rolename VARCHAR) RETURNS BIGINT AS $$
     DECLARE
     BEGIN
         INSERT INTO roles(id, rolename) VALUES(nextval('roles_seq'), rolename);
@@ -32,10 +32,10 @@ CREATE OR REPLACE FUNCTION add_role(rolename VARCHAR) RETURNS NUMERIC AS $$
         END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION add_user_role(username_to_link VARCHAR, rolename_to_link VARCHAR) RETURNS NUMERIC AS $$
+CREATE OR REPLACE FUNCTION add_user_role(username_to_link VARCHAR, rolename_to_link VARCHAR) RETURNS BIGINT AS $$
     DECLARE
-        user_id NUMERIC;
-        role_id NUMERIC;
+        user_id BIGINT;
+        role_id BIGINT;
     BEGIN
         SELECT id INTO user_id FROM users WHERE username=username_to_link;
         SELECT id INTO role_id FROM roles WHERE rolename=rolename_to_link;
