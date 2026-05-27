@@ -30,25 +30,16 @@ public class MethodCallTimingAspect {
     @Around("methodCallTiming()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
         long start = System.currentTimeMillis();
-        Object result = null;
-        Throwable throwable = null;
         try {
-            result = joinPoint.proceed();
-        } catch (Throwable e) {
-            throwable = e;
-        }
-        long end = System.currentTimeMillis();
-        long duration = end - start;
-        if (duration >= threshold) {
-            Signature signature = joinPoint.getSignature();
-            String methodDescription = signature.getDeclaringType().getSimpleName() + "." + signature.getName();
-            log.warn("Method {} took {} ms", methodDescription, duration);
-        }
-        if (throwable != null) {
-            throw throwable;
-        } else {
-            return result;
+            return joinPoint.proceed();
+        } finally {
+            long end = System.currentTimeMillis();
+            long duration = end - start;
+            if (duration >= threshold) {
+                Signature signature = joinPoint.getSignature();
+                String methodDescription = signature.getDeclaringType().getSimpleName() + "." + signature.getName();
+                log.warn("Method {} took {} ms", methodDescription, duration);
+            }
         }
     }
-
 }
