@@ -1,8 +1,8 @@
-package org.softwarecave.springbootnotecategorizer.categorizer.keywordbased;
+package org.softwarecave.springbootnotecategorizer.categorizer.keywords;
 
 import lombok.extern.slf4j.Slf4j;
 import org.softwarecave.springbootnotecategorizer.categorizer.CategorizationException;
-import org.softwarecave.springbootnotecategorizer.categorizer.keywordbased.KeywordMatrix.CategoryEntry;
+import org.softwarecave.springbootnotecategorizer.categorizer.keywords.KeywordMatrix.CategoryEntry;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.json.JsonMapper;
 

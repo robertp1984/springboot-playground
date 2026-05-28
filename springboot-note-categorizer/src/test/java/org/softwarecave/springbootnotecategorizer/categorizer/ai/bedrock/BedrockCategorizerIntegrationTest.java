@@ -1,18 +1,30 @@
-package org.softwarecave.springbootnotecategorizer.categorizer.keywordbased;
+package org.softwarecave.springbootnotecategorizer.categorizer.ai.bedrock;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.softwarecave.springbootnotecategorizer.categorizer.Categorizer;
 import org.softwarecave.springbootnotecategorizer.categorizer.CategorizerFactory;
 import org.softwarecave.springbootnotecategorizer.categorizer.CategorizerResult;
 import org.softwarecave.springbootnotecategorizer.categorizer.CategorizerResults;
-import tools.jackson.databind.json.JsonMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SimpleKeywordBasedCategorizerTest {
+/*
+ * This test depends on the real external service (Amazon Bedrock) and is more of an integration test than a unit test.
+ * Due to the nature of the AI the results are not deterministic and the results may vary between executions.
+ * Therefore, the assertion rules are more relaxed and the test may fail from time to time.
+ */
+@SpringBootTest
+public class BedrockCategorizerIntegrationTest {
+
+    @Autowired
+    private CategorizerFactory categorizerFactory;
+
     @ParameterizedTest
     @CsvSource(value = {
             "Pushing to Git repository, Use git push to upload your local repository content to a remote., GIT",
@@ -21,18 +33,19 @@ public class SimpleKeywordBasedCategorizerTest {
             "Using Spring Data JPA, Use Spring Data JPA to simplify database access in your Spring application., SPRING|JPA",
             "Dockerizing a Spring Boot application, Use Docker to containerize your Spring Boot application., SPRING|DOCKER"
     })
+    @Disabled("Temporarily disabled not to incur large costs in AWS")
     public void testCategorizeParams(String title, String body, String expectedCategoriesString) {
-        Categorizer categorizer = new CategorizerFactory(new JsonMapper()).getKeywordBasedCategorizer();
+        Categorizer categorizer = categorizerFactory.getBedrockBasedCategorizer();
         CategorizerResults categories = categorizer.categorize(title, body);
         assertThat(categories).isNotNull();
 
-        String[] expectedCategories = expectedCategoriesString.split("\\|");
-        int expectedCategoriesCount = expectedCategories.length;
+        List<String> expectedCategories = List.of(expectedCategoriesString.split("\\|"));
+        int expectedCategoriesCount = expectedCategories.size();
 
         List<CategorizerResult> topKResults = categories.getTopKResults(expectedCategoriesCount);
         assertThat(topKResults).hasSize(expectedCategoriesCount);
         for (int i = 0; i < expectedCategoriesCount; i++) {
-            assertThat(topKResults.get(i).category().name()).isEqualTo(expectedCategories[i]);
+            assertThat(topKResults.get(i).category().name()).isIn(expectedCategories);
             assertThat(topKResults.get(i).score()).isGreaterThan(0.2);
         }
     }

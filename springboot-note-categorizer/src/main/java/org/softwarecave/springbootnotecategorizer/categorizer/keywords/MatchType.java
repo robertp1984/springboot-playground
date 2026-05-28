@@ -1,4 +1,4 @@
-package org.softwarecave.springbootnotecategorizer.categorizer.keywordbased;
+package org.softwarecave.springbootnotecategorizer.categorizer.keywords;
 
 public enum MatchType {
     SHOULD("should"),

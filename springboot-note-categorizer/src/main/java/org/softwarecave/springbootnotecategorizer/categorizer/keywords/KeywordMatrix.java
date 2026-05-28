@@ -1,4 +1,4 @@
-package org.softwarecave.springbootnotecategorizer.categorizer.keywordbased;
+package org.softwarecave.springbootnotecategorizer.categorizer.keywords;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

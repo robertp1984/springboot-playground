@@ -32,7 +32,7 @@ public class StickyNoteKafkaStreamsConfigTest {
         Properties kafkaStreamsConfig = processor.kafkaStreamsConfig("localhost:29092").asProperties();
 
         StreamsBuilder streamsBuilder = new StreamsBuilder();
-        KStream<Long, String> kafkaStream = processor.kafkaStream(INPUT_TOPIC, OUTPUT_TOPIC, new CategorizerFactory(new JsonMapper()), streamsBuilder);
+        KStream<Long, String> kafkaStream = processor.kafkaStream(INPUT_TOPIC, OUTPUT_TOPIC, new CategorizerFactory(new JsonMapper(), null, null), streamsBuilder);
 
         topologyTestDriver = new TopologyTestDriver(streamsBuilder.build(), kafkaStreamsConfig);
     }
