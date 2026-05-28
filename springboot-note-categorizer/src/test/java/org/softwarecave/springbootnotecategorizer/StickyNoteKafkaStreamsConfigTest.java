@@ -11,6 +11,7 @@ import org.apache.kafka.streams.test.TestRecord;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.softwarecave.springbootnotecategorizer.categorizer.CategorizerEngine;
 import org.softwarecave.springbootnotecategorizer.categorizer.CategorizerFactory;
 import tools.jackson.databind.json.JsonMapper;
 
@@ -32,7 +33,8 @@ public class StickyNoteKafkaStreamsConfigTest {
         Properties kafkaStreamsConfig = processor.kafkaStreamsConfig("localhost:29092").asProperties();
 
         StreamsBuilder streamsBuilder = new StreamsBuilder();
-        KStream<Long, String> kafkaStream = processor.kafkaStream(INPUT_TOPIC, OUTPUT_TOPIC, new CategorizerFactory(new JsonMapper(), null, null), streamsBuilder);
+        KStream<Long, String> kafkaStream = processor.kafkaStream(INPUT_TOPIC, OUTPUT_TOPIC,
+                new CategorizerFactory(new JsonMapper(), null, CategorizerEngine.KEYWORDS), streamsBuilder);
 
         topologyTestDriver = new TopologyTestDriver(streamsBuilder.build(), kafkaStreamsConfig);
     }
