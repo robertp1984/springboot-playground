@@ -1,4 +1,4 @@
-package org.softwarecave.springbootnotecategorizer.categorizer.aibased;
+package org.softwarecave.springbootnotecategorizer.categorizer.ai.bedrock;
 
 import lombok.extern.slf4j.Slf4j;
 import org.softwarecave.springbootnotecategorizer.Category;
@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class BedrockBasedCategorizer implements Categorizer {
+public class BedrockCategorizer implements Categorizer {
 
     private static final String TEXT_GEN_MODEL = "amazon.nova-pro-v1:0";
     private static final String APPLICATION_JSON = "application/json";
@@ -25,7 +25,7 @@ public class BedrockBasedCategorizer implements Categorizer {
     private final JsonMapper jsonMapper;
     private final String allCategoriesString;
 
-    public BedrockBasedCategorizer(JsonMapper jsonMapper) {
+    public BedrockCategorizer(JsonMapper jsonMapper) {
         this.jsonMapper = jsonMapper;
         allCategoriesString = Arrays.stream(Category.values())
                 .map(Category::name)

@@ -1,9 +1,9 @@
-package org.softwarecave.springbootnotecategorizer.categorizer.keywordbased;
+package org.softwarecave.springbootnotecategorizer.categorizer.keywords;
 
 import org.softwarecave.springbootnotecategorizer.categorizer.Categorizer;
 import org.softwarecave.springbootnotecategorizer.categorizer.CategorizerResults;
 
-public record SimpleKeywordBasedCategorizer(KeywordMatrix keywordMatrix) implements Categorizer {
+public record SimpleKeywordsCategorizer(KeywordMatrix keywordMatrix) implements Categorizer {
 
     @Override
     public CategorizerResults categorize(String title, String body) {

@@ -47,7 +47,7 @@ public class StickyNoteKafkaStreamsConfig {
                                              @Value("${app.kafka.output-topic}") String outputTopic,
                                              CategorizerFactory categorizerFactory,
                                              StreamsBuilder builder) {
-        Categorizer keywordBasedCategorizer = categorizerFactory.getKeywordBasedCategorizer();
+        Categorizer keywordBasedCategorizer = categorizerFactory.getDefaultCategorizer();
 
         KStream<Long, String> stickyNoteStream = builder.stream(inputTopic);
 

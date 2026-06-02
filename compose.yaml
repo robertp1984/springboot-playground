@@ -46,6 +46,7 @@ services:
     environment:
       - KAFKA_BOOTSTRAP_SERVERS=kafka1:29092
       - AWS_BEARER_TOKEN_BEDROCK=${AWS_BEARER_TOKEN_BEDROCK}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
     restart: no
     depends_on:
       - kafka1

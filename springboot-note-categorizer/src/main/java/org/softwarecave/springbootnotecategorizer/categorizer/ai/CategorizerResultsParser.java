@@ -1,9 +1,7 @@
-package org.softwarecave.springbootnotecategorizer.categorizer.aibased;
+package org.softwarecave.springbootnotecategorizer.categorizer.ai;
 
-import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
 import org.softwarecave.springbootnotecategorizer.Category;
-import org.softwarecave.springbootnotecategorizer.categorizer.CategorizationException;
 import org.softwarecave.springbootnotecategorizer.categorizer.CategorizerResult;
 import org.softwarecave.springbootnotecategorizer.categorizer.CategorizerResults;
 
@@ -12,28 +10,9 @@ import java.util.List;
 import java.util.Objects;
 
 @Slf4j
-public class BedrockTextParser {
+public class CategorizerResultsParser {
 
-    public CategorizerResults parseResponse(byte[] byteArray) {
-        var documentContext = JsonPath.parse(new String(byteArray));
-        String responseText = documentContext.read("$.output.message.content[0].text");
-        if (responseText == null) {
-            throw new CategorizationException("Failed to categorize the note because the response text is null.");
-        }
-        return parseResponseText(responseText);
-    }
-
-    private CategorizerResults parseResponseText(String responseText) {
-        var parts = responseText.trim().split("\\s+");
-
-        List<CategorizerResult> results = Arrays.stream(parts)
-                .map(this::parseSingleResult)
-                .filter(Objects::nonNull)
-                .toList();
-        return new CategorizerResults(results);
-    }
-
-    private CategorizerResult parseSingleResult(String part) {
+    private static CategorizerResult parseSingleResult(String part) {
         var categoryAndScore = part.split("=");
         if (categoryAndScore.length != 2) {
             log.warn("Skipping invalid category and score pair: {}", part);
@@ -61,4 +40,13 @@ public class BedrockTextParser {
         return new CategorizerResult(category, score);
     }
 
+    public static CategorizerResults fromText(String responseText) {
+        var parts = responseText.trim().split("\\s+");
+
+        List<CategorizerResult> results = Arrays.stream(parts)
+                .map(CategorizerResultsParser::parseSingleResult)
+                .filter(Objects::nonNull)
+                .toList();
+        return new CategorizerResults(results);
+    }
 }

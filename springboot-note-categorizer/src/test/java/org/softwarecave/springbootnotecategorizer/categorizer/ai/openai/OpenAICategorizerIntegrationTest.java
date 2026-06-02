@@ -1,4 +1,4 @@
-package org.softwarecave.springbootnotecategorizer.categorizer.aibased;
+package org.softwarecave.springbootnotecategorizer.categorizer.ai.openai;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -7,18 +7,24 @@ import org.softwarecave.springbootnotecategorizer.categorizer.Categorizer;
 import org.softwarecave.springbootnotecategorizer.categorizer.CategorizerFactory;
 import org.softwarecave.springbootnotecategorizer.categorizer.CategorizerResult;
 import org.softwarecave.springbootnotecategorizer.categorizer.CategorizerResults;
-import tools.jackson.databind.json.JsonMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 /*
- * This test depends on the real external service (Amazon Bedrock) and is more of an integration test than a unit test.
+ * This test depends on the real external service (OpenAI) and is more of an integration test than a unit test.
  * Due to the nature of the AI the results are not deterministic and the results may vary between executions.
  * Therefore, the assertion rules are more relaxed and the test may fail from time to time.
  */
-public class BedrockBasedCategorizerIntegrationTest {
+@SpringBootTest
+public class OpenAICategorizerIntegrationTest {
+
+    @Autowired
+    private CategorizerFactory categorizerFactory;
+
     @ParameterizedTest
     @CsvSource(value = {
             "Pushing to Git repository, Use git push to upload your local repository content to a remote., GIT",
@@ -29,7 +35,7 @@ public class BedrockBasedCategorizerIntegrationTest {
     })
     @Disabled("Temporarily disabled not to incur large costs in AWS")
     public void testCategorizeParams(String title, String body, String expectedCategoriesString) {
-        Categorizer categorizer = new CategorizerFactory(new JsonMapper()).getBedrockBasedCategorizer();
+        Categorizer categorizer = categorizerFactory.getOpenAICategorizer();
         CategorizerResults categories = categorizer.categorize(title, body);
         assertThat(categories).isNotNull();
 
