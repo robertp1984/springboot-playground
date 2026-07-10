@@ -7,6 +7,7 @@ import org.softwarecave.springbootnotecategorizer.categorizer.Categorizer;
 import org.softwarecave.springbootnotecategorizer.categorizer.CategorizerResults;
 import org.softwarecave.springbootnotecategorizer.categorizer.ai.CategorizerResultsParser;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.openai.OpenAiChatModel;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -14,12 +15,11 @@ import java.util.stream.Collectors;
 @Slf4j
 public class OpenAICategorizer implements Categorizer {
 
-
     private final ChatClient chatClient;
     private final String allCategoriesString;
 
-    public OpenAICategorizer(ChatClient.Builder chatClientBuilder) {
-        this.chatClient = chatClientBuilder.build();
+    public OpenAICategorizer(OpenAiChatModel chatModel) {
+        chatClient = ChatClient.builder(chatModel).build();
         allCategoriesString = Arrays.stream(Category.values())
                 .map(Category::name)
                 .collect(Collectors.joining(", "));
@@ -27,7 +27,9 @@ public class OpenAICategorizer implements Categorizer {
 
     @Override
     public CategorizerResults categorize(String title, String body) {
-        var systemPrompt = "You return a list of categories with scores in range 0-10 for a given note. The categories are %s. The response format is categoryName=score separated by spaces. Do not add anything else to the response."
+        var systemPrompt = """
+                You return a list of categories with scores in range 0-10 for a given note. The categories are %s.
+                The response format is categoryName=score separated by spaces. Do not add anything else to the response."""
                 .formatted(allCategoriesString);
         var userPrompt = "Please categorize the note with title: '%s' and body: '%s'."
                 .formatted(title, body);

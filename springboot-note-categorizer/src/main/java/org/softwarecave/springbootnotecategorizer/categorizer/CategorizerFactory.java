@@ -5,7 +5,7 @@ import org.softwarecave.springbootnotecategorizer.categorizer.ai.openai.OpenAICa
 import org.softwarecave.springbootnotecategorizer.categorizer.keywords.KeywordMatrix;
 import org.softwarecave.springbootnotecategorizer.categorizer.keywords.KeywordMatrixLoader;
 import org.softwarecave.springbootnotecategorizer.categorizer.keywords.SimpleKeywordsCategorizer;
-import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import tools.jackson.databind.json.JsonMapper;
@@ -16,13 +16,13 @@ public class CategorizerFactory {
     public static final String DEFAULT_KEYWORD_MATRIX_FILENAME = "keyword-matrix.json";
 
     private final JsonMapper jsonMapper;
-    private final ChatClient.Builder chatClientBuilder;
+    private final OpenAiChatModel openAiChatModel;
     private final CategorizerEngine categorizerEngine;
 
-    public CategorizerFactory(JsonMapper jsonMapper, ChatClient.Builder chatClientBuilder,
+    public CategorizerFactory(JsonMapper jsonMapper, OpenAiChatModel openAiChatModel,
                               @Value("${app.categorizer.engine}") CategorizerEngine categorizerEngine) {
         this.jsonMapper = jsonMapper;
-        this.chatClientBuilder = chatClientBuilder;
+        this.openAiChatModel = openAiChatModel;
         this.categorizerEngine = categorizerEngine;
     }
 
@@ -36,7 +36,7 @@ public class CategorizerFactory {
     }
 
     public Categorizer getOpenAICategorizer() {
-        return new OpenAICategorizer(chatClientBuilder);
+        return new OpenAICategorizer(openAiChatModel);
     }
 
     public Categorizer getDefaultCategorizer() {
