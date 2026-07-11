@@ -76,7 +76,22 @@ This starts:
 - **springboot-note** (port 8080): REST API for the main application
 - **springboot-note-categorizer**: Kafka Streams application to categorize notes and produce categorized output
 
-Then the Python script tools/initial-data/create-sticky-notes-from-file.py can be used to send sample sticky notes via REST API for testing.
+The Python script:
+```bash
+python tools/initial-data/create-sticky-notes-from-file.py
+```
+can be used to send sample sticky notes via REST API for testing. The script can be used multiple times.
+
+The scripts:
+```bash
+./tools/kafka-connect/start-stickynote-sink-to-mongodb.sh
+./tools/kafka-connect/start-stickynote-sink-to-opensearch.sh
+./tools/kafka-connect/start-stickynotecategorized-sink-to-opensearch.sh
+```
+can be used to start Kafka Connect connector to sink the data from Kafka topics:
+* playground.stickynote.json into MongoDB
+* playground.stickynote.json into OpenSearch
+* playground.stickynote.json.categorized into OpenSearch 
 
 ### Running Individually
 
@@ -116,6 +131,10 @@ mvn spring-boot:run
 ```bash
 kafka-topics --bootstrap-server kafka1:29092 --create \
   --topic playground.stickynote.json \
+  --partitions 9 --replication-factor 3
+
+kafka-topics --bootstrap-server kafka1:29092 --create \
+  --topic playground.stickynote.avro \
   --partitions 9 --replication-factor 3
 
 kafka-topics --bootstrap-server kafka1:29092 --create \
