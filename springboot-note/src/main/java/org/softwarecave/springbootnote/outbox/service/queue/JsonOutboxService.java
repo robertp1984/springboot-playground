@@ -30,11 +30,14 @@ public class JsonOutboxService implements OutboxService {
     @Transactional
     @Override
     public void send(StickyNote stickyNote) {
-
         StickyNoteDTO dto = stickyNoteConverter.convertToDTO(stickyNote);
         String payloadString = jsonMapper.writeValueAsString(dto);
 
-        Outbox outbox = new Outbox(null, AggregateType.STICKY_NOTE, stickyNote.getId(),
+        save(stickyNote.getId(), payloadString, AggregateType.STICKY_NOTE);
+    }
+
+    private void save(Long id, String payloadString, AggregateType aggregateType) {
+        Outbox outbox = new Outbox(null, aggregateType, id,
                 MessageType.JSON, ZonedDateTime.now(), null, payloadString, Status.NEW);
 
         log.info("Saving to outbox: {}", outbox);

@@ -10,6 +10,7 @@ import org.softwarecave.springbootnote.outbox.model.AggregateType;
 import org.softwarecave.springbootnote.outbox.model.MessageType;
 import org.softwarecave.springbootnote.outbox.model.Outbox;
 import org.softwarecave.springbootnote.outbox.service.InvalidOutboxDataException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.Future;
@@ -18,7 +19,12 @@ import java.util.concurrent.Future;
 @Service
 @Slf4j
 public class OutboxDispatcherAvroStrategy implements OutboxDispatcherStrategy {
-    private final KafkaAvroProducer kafkaAvroProducer;
+    private KafkaAvroProducer kafkaAvroProducer;
+
+    @Autowired(required = false)
+    public void setKafkaAvroProducer(KafkaAvroProducer kafkaAvroProducer) {
+        this.kafkaAvroProducer = kafkaAvroProducer;
+    }
 
     @Override
     public Future<RecordMetadata> send(Outbox outbox) {
@@ -32,9 +38,10 @@ public class OutboxDispatcherAvroStrategy implements OutboxDispatcherStrategy {
 
     private Class<? extends SpecificRecord> getAvroClass(Outbox entry) {
         AggregateType aggregateType = entry.getAggregateType();
-        return switch (aggregateType) {
-            case STICKY_NOTE -> StickyNote.class; // TODO: encapsulate this
-            case null -> throw new InvalidOutboxDataException("Unrecognized aggregate type " + aggregateType);
-        };
+        if (aggregateType != null) {
+            return aggregateType.getAvroClass();
+        } else {
+            throw new InvalidOutboxDataException("Unrecognized aggregate type " + aggregateType);
+        }
     }
 }

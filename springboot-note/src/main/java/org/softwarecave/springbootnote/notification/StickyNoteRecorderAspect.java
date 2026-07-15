@@ -33,9 +33,11 @@ public class StickyNoteRecorderAspect {
             }
         }
 
+        sendToOutbox((StickyNote) returnValue);
+    }
 
+    private void sendToOutbox(StickyNote stickyNote) {
         if (outboxServices != null && !outboxServices.isEmpty()) {
-            StickyNote stickyNote = (StickyNote) returnValue;
             outboxServices.forEach(outboxService -> outboxService.send(stickyNote));
         } else {
             log.warn("No outbox services are available, skipping Kafka notification");

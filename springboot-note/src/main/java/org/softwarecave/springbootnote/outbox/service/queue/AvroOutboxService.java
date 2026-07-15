@@ -31,7 +31,11 @@ public class AvroOutboxService implements OutboxService {
         var avroStickyNote = avroStickyNoteConverter.convertToAvro(stickyNote);
         byte[] payloadBinary = AvroTools.convertToBytes(avroStickyNote);
 
-        Outbox outbox = new Outbox(null, AggregateType.STICKY_NOTE, stickyNote.getId(),
+        save(stickyNote.getId(), payloadBinary, AggregateType.STICKY_NOTE);
+    }
+
+    private void save(Long id, byte[] payloadBinary, AggregateType aggregateType) {
+        Outbox outbox = new Outbox(null, aggregateType, id,
                 MessageType.AVRO, ZonedDateTime.now(), payloadBinary, null, Status.NEW);
 
         log.info("Saving to outbox: {}", outbox);

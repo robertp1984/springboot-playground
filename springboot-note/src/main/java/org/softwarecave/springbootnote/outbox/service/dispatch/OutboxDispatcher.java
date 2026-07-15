@@ -7,6 +7,7 @@ import org.softwarecave.springbootnote.outbox.model.Outbox;
 import org.softwarecave.springbootnote.outbox.model.Status;
 import org.softwarecave.springbootnote.outbox.service.InvalidOutboxDataException;
 import org.softwarecave.springbootnote.outbox.service.OutboxRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -28,10 +29,14 @@ public class OutboxDispatcher {
     private final OutboxRepository outboxRepository;
     private final Map<MessageType, OutboxDispatcherStrategy> dispatcherStrategies;
 
-    public OutboxDispatcher(OutboxRepository outboxRepository,
-                            List<OutboxDispatcherStrategy> dispatcherStrategies) {
+    public OutboxDispatcher(OutboxRepository outboxRepository) {
         this.outboxRepository = outboxRepository;
         this.dispatcherStrategies = new HashMap<>();
+    }
+
+    @Autowired(required = false)
+    public void setDispatcherStrategies(List<OutboxDispatcherStrategy> dispatcherStrategies) {
+
         for (var dispatcherStrategy : dispatcherStrategies) {
             var prevValue = this.dispatcherStrategies.putIfAbsent(dispatcherStrategy.getMessageType(), dispatcherStrategy);
             if (prevValue != null) {

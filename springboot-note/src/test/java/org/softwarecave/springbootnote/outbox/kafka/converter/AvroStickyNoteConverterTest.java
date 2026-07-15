@@ -1,4 +1,4 @@
-package org.softwarecave.springbootnote.notification.kafka.converter;
+package org.softwarecave.springbootnote.outbox.kafka.converter;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -6,7 +6,6 @@ import org.softwarecave.springbootnote.note.model.StickyNote;
 import org.softwarecave.springbootnote.note.model.StickyNoteLink;
 import org.softwarecave.springbootnote.note.model.StickyNoteTag;
 import org.softwarecave.springbootnote.note.model.Type;
-import org.softwarecave.springbootnote.outbox.kafka.converter.AvroStickyNoteConverter;
 import org.softwarecave.springbootnote.tag.model.Tag;
 
 import java.time.LocalDateTime;

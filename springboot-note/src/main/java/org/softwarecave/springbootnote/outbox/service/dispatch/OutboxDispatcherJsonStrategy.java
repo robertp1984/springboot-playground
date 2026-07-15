@@ -6,6 +6,7 @@ import org.apache.kafka.clients.producer.RecordMetadata;
 import org.softwarecave.springbootnote.outbox.kafka.KafkaJsonProducer;
 import org.softwarecave.springbootnote.outbox.model.MessageType;
 import org.softwarecave.springbootnote.outbox.model.Outbox;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.Future;
@@ -14,7 +15,13 @@ import java.util.concurrent.Future;
 @Service
 @Slf4j
 public class OutboxDispatcherJsonStrategy implements OutboxDispatcherStrategy {
-    private final KafkaJsonProducer kafkaJsonProducer;
+
+    private KafkaJsonProducer kafkaJsonProducer;
+
+    @Autowired(required = false)
+    public void setKafkaJsonProducer(KafkaJsonProducer kafkaJsonProducer) {
+        this.kafkaJsonProducer = kafkaJsonProducer;
+    }
 
     @Override
     public Future<RecordMetadata> send(Outbox outbox) {
