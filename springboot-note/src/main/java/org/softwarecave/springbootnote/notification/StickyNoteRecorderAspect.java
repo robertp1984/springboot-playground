@@ -6,7 +6,7 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.softwarecave.springbootnote.note.model.StickyNote;
-import org.softwarecave.springbootnote.outbox.service.OutboxService;
+import org.softwarecave.springbootnote.outbox.service.queue.OutboxService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

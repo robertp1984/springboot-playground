@@ -14,17 +14,6 @@ import java.util.List;
 @Slf4j
 public class AvroStickyNoteConverter {
 
-    public ByteBuffer convertToByteBuffer(StickyNote value) {
-        try {
-            var stickyNoteAvro = convertToAvro(value);
-            return stickyNoteAvro.toByteBuffer();
-        } catch (IOException e) {
-            // TODO:
-            log.error("Failed to convert Sticky Note Avro object to ByteBuffer");
-            throw new IllegalArgumentException("Failed to convert Sticky Note Avro object to ByteBuffer");
-        }
-    }
-
     public org.softwarecave.springbootnote.avro.StickyNote convertToAvro(StickyNote value) {
         var linksAvro = convertLinksToAvro(value);
         var tagsAvro = convertTagsToAvro(value);

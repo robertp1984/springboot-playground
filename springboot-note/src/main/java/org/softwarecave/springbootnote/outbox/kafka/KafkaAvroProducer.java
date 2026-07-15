@@ -23,6 +23,8 @@ import org.springframework.stereotype.Component;
 import java.util.Properties;
 import java.util.concurrent.Future;
 
+import static org.softwarecave.springbootnote.outbox.tools.AvroTools.fromBytes;
+
 @Slf4j
 @Component
 @ConditionalOnBooleanProperty(prefix = "app.kafka.avro", name = "enabled", havingValue = true)
@@ -75,10 +77,5 @@ public class KafkaAvroProducer {
         }
     }
 
-    public static <T> T fromBytes(byte[] data, Class<T> avroClass) throws Exception {
-        DatumReader<T> reader = new SpecificDatumReader<>(avroClass);
-        BinaryDecoder decoder = DecoderFactory.get().binaryDecoder(data, null);
-        return reader.read(null, decoder);
-    }
 
 }

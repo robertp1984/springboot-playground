@@ -1,4 +1,4 @@
-package org.softwarecave.springbootnote.outbox.service;
+package org.softwarecave.springbootnote.outbox.service.queue;
 
 import org.softwarecave.springbootnote.note.model.StickyNote;
 

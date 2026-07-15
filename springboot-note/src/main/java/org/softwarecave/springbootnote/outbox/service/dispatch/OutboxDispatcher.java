@@ -1,13 +1,7 @@
-package org.softwarecave.springbootnote.outbox.service.sender;
+package org.softwarecave.springbootnote.outbox.service.dispatch;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.avro.specific.SpecificRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
-import org.softwarecave.springbootnote.avro.StickyNote;
-import org.softwarecave.springbootnote.outbox.kafka.KafkaAvroProducer;
-import org.softwarecave.springbootnote.outbox.kafka.KafkaJsonProducer;
-import org.softwarecave.springbootnote.outbox.model.AggregateType;
 import org.softwarecave.springbootnote.outbox.model.MessageType;
 import org.softwarecave.springbootnote.outbox.model.Outbox;
 import org.softwarecave.springbootnote.outbox.model.Status;
@@ -20,18 +14,31 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
-public class OutboxSender {
+public class OutboxDispatcher {
 
     private final OutboxRepository outboxRepository;
-    private final KafkaJsonProducer kafkaJsonProducer;
-    private final KafkaAvroProducer kafkaAvroProducer;
+    private final Map<MessageType, OutboxDispatcherStrategy> dispatcherStrategies;
+
+    public OutboxDispatcher(OutboxRepository outboxRepository,
+                            List<OutboxDispatcherStrategy> dispatcherStrategies) {
+        this.outboxRepository = outboxRepository;
+        this.dispatcherStrategies = new HashMap<>();
+        for (var dispatcherStrategy : dispatcherStrategies) {
+            var prevValue = this.dispatcherStrategies.putIfAbsent(dispatcherStrategy.getMessageType(), dispatcherStrategy);
+            if (prevValue != null) {
+                throw new InvalidOutboxDataException("There are conflicting Outbox dispatchers strategies with the same message type");
+            }
+        }
+    }
 
     @Scheduled(fixedDelayString = "${app.outbox.sender.delay}", timeUnit = TimeUnit.MILLISECONDS)
     public void process() {
@@ -75,18 +82,12 @@ public class OutboxSender {
 
     private Future<RecordMetadata> sendToKafka(Outbox entry) {
         MessageType messageType = entry.getMessageType();
-        return switch (messageType) {
-            case AVRO -> kafkaAvroProducer.sendToKafka(entry, getAvroClass(entry));
-            case JSON -> kafkaJsonProducer.sendToKafka(entry);
-            case null -> throw new InvalidOutboxDataException("Unrecognized message type " + messageType);
-        };
+        var dispatcherStrategy = dispatcherStrategies.get(messageType);
+        if (dispatcherStrategy != null) {
+            return dispatcherStrategy.send(entry);
+        } else {
+            throw new InvalidOutboxDataException("Unrecognized message type " + messageType);
+        }
     }
 
-    private Class<? extends SpecificRecord> getAvroClass(Outbox entry) {
-        AggregateType aggregateType = entry.getAggregateType();
-        return switch (aggregateType) {
-            case STICKY_NOTE -> StickyNote.class;
-            case null -> throw new InvalidOutboxDataException("Unrecognized aggregate type " + aggregateType);
-        };
-    }
 }
