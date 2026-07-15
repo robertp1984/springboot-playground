@@ -51,3 +51,6 @@ app:
     avro:
       enabled: true
       stickynote-topic: playground.stickynote.avro
+  outbox:
+    sender:
+      delay: 1000

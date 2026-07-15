@@ -1,14 +1,30 @@
-package org.softwarecave.springbootnote.notification.kafka.converter;
+package org.softwarecave.springbootnote.outbox.kafka.converter;
 
 import lombok.extern.slf4j.Slf4j;
 import org.softwarecave.springbootnote.note.model.StickyNote;
 import org.softwarecave.springbootnote.tag.model.Tag;
+import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.time.ZoneOffset;
 import java.util.List;
 
+@Component
 @Slf4j
 public class AvroStickyNoteConverter {
+
+    public ByteBuffer convertToByteBuffer(StickyNote value) {
+        try {
+            var stickyNoteAvro = convertToAvro(value);
+            return stickyNoteAvro.toByteBuffer();
+        } catch (IOException e) {
+            // TODO:
+            log.error("Failed to convert Sticky Note Avro object to ByteBuffer");
+            throw new IllegalArgumentException("Failed to convert Sticky Note Avro object to ByteBuffer");
+        }
+    }
+
     public org.softwarecave.springbootnote.avro.StickyNote convertToAvro(StickyNote value) {
         var linksAvro = convertLinksToAvro(value);
         var tagsAvro = convertTagsToAvro(value);

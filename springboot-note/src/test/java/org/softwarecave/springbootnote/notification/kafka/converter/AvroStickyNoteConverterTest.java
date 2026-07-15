@@ -6,6 +6,7 @@ import org.softwarecave.springbootnote.note.model.StickyNote;
 import org.softwarecave.springbootnote.note.model.StickyNoteLink;
 import org.softwarecave.springbootnote.note.model.StickyNoteTag;
 import org.softwarecave.springbootnote.note.model.Type;
+import org.softwarecave.springbootnote.outbox.kafka.converter.AvroStickyNoteConverter;
 import org.softwarecave.springbootnote.tag.model.Tag;
 
 import java.time.LocalDateTime;

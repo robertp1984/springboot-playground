@@ -1,4 +1,4 @@
-package org.softwarecave.springbootnote.notification.kafka;
+package org.softwarecave.springbootnote.outbox.kafka;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
@@ -12,34 +12,31 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import org.softwarecave.springbootnote.note.model.StickyNote;
 import org.softwarecave.springbootnote.note.web.StickyNoteDTO;
 import org.softwarecave.springbootnote.note.web.converter.StickyNoteConverter;
+import org.softwarecave.springbootnote.outbox.model.Outbox;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBooleanProperty;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.json.JsonMapper;
 
 import java.util.Properties;
+import java.util.concurrent.Future;
 
 @Slf4j
 @Component
 @ConditionalOnBooleanProperty(prefix = "app.kafka.json", name = "enabled", havingValue = true)
-public class JsonKafkaStickyNoteProducer implements KafkaStickyNoteProducer {
+public class KafkaJsonProducer {
 
-    private final JsonMapper jsonMapper;
     private final String bootstrapServers;
     private final String noteTopic;
 
     private KafkaProducer<Long, String> kafkaProducer;
-    private final StickyNoteConverter stickyNoteConverter;
 
-    public JsonKafkaStickyNoteProducer(JsonMapper jsonMapper,
-                                       StickyNoteConverter stickyNoteConverter,
-                                       @Value("${app.kafka.bootstrap-servers}") String bootstrapServers,
-                                       @Value("${app.kafka.json.stickynote-topic}") String noteTopic) {
-        this.jsonMapper = jsonMapper;
+    public KafkaJsonProducer(
+                             StickyNoteConverter stickyNoteConverter,
+                             @Value("${app.kafka.bootstrap-servers}") String bootstrapServers,
+                             @Value("${app.kafka.json.stickynote-topic}") String noteTopic) {
         this.bootstrapServers = bootstrapServers;
         this.noteTopic = noteTopic;
-
-        this.stickyNoteConverter = stickyNoteConverter;
     }
 
     @PostConstruct
@@ -62,20 +59,9 @@ public class JsonKafkaStickyNoteProducer implements KafkaStickyNoteProducer {
         log.info("Closed Kafka producer");
     }
 
-    @Override
-    public void sendToKafka(StickyNote value) {
-        StickyNoteDTO dto = stickyNoteConverter.convertToDTO(value);
-        Long key = dto.getId();
-        String jsonValue = jsonMapper.writeValueAsString(dto);
-        var producerRecord = new ProducerRecord<>(noteTopic, key, jsonValue);
-        kafkaProducer.send(producerRecord, (RecordMetadata metadata, Exception exception) -> {
-            if (exception != null) {
-                log.error("Failed to send message to Kafka", exception);
-            } else {
-                log.info("Message sent to Kafka topic {} partition {} with offset {}",
-                        metadata.topic(), metadata.partition(), metadata.offset());
-            }
-        });
+    public Future<RecordMetadata> sendToKafka(Outbox value) {
+        var producerRecord = new ProducerRecord<>(noteTopic, value.getAggregateId(), value.getPayloadString());
+        return kafkaProducer.send(producerRecord);
     }
 
 }
