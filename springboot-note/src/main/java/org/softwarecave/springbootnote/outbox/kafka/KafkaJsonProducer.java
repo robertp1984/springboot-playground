@@ -9,14 +9,11 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.serialization.LongSerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
-import org.softwarecave.springbootnote.note.model.StickyNote;
-import org.softwarecave.springbootnote.note.web.StickyNoteDTO;
 import org.softwarecave.springbootnote.note.web.converter.StickyNoteConverter;
 import org.softwarecave.springbootnote.outbox.model.Outbox;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBooleanProperty;
 import org.springframework.stereotype.Component;
-import tools.jackson.databind.json.JsonMapper;
 
 import java.util.Properties;
 import java.util.concurrent.Future;
@@ -32,9 +29,9 @@ public class KafkaJsonProducer {
     private KafkaProducer<Long, String> kafkaProducer;
 
     public KafkaJsonProducer(
-                             StickyNoteConverter stickyNoteConverter,
-                             @Value("${app.kafka.bootstrap-servers}") String bootstrapServers,
-                             @Value("${app.kafka.json.stickynote-topic}") String noteTopic) {
+            StickyNoteConverter stickyNoteConverter,
+            @Value("${app.kafka.bootstrap-servers}") String bootstrapServers,
+            @Value("${app.kafka.json.stickynote-topic}") String noteTopic) {
         this.bootstrapServers = bootstrapServers;
         this.noteTopic = noteTopic;
     }

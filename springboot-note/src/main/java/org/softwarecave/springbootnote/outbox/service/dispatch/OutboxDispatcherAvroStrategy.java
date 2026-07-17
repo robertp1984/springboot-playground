@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.specific.SpecificRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
-import org.softwarecave.springbootnote.avro.StickyNote;
 import org.softwarecave.springbootnote.outbox.kafka.KafkaAvroProducer;
 import org.softwarecave.springbootnote.outbox.model.AggregateType;
 import org.softwarecave.springbootnote.outbox.model.MessageType;

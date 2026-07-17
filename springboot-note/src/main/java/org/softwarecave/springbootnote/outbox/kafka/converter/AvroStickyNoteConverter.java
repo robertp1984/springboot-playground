@@ -5,8 +5,6 @@ import org.softwarecave.springbootnote.note.model.StickyNote;
 import org.softwarecave.springbootnote.tag.model.Tag;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.time.ZoneOffset;
 import java.util.List;
 
