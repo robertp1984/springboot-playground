@@ -1,4 +1,4 @@
-package org.softwarecave.springbootnote.notification.kafka.converter;
+package org.softwarecave.springbootnote.outbox.kafka.converter;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

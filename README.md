@@ -10,6 +10,7 @@ SpringBoot Playground is a multi-module Maven project that showcases a note-taki
 
 - **Event-Driven Architecture** using Apache Kafka
 - **Microservices** communication via message streaming
+- **Outbox** pattern when communicating with Apache Kafka
 - **AI-Powered Features** using OpenAI and AWS Bedrock
 - **Stream Processing** with Kafka Streams
 - **Multi-Database Support** (PostgreSQL, MongoDB, OpenSearch)

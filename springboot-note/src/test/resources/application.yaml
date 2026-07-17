@@ -11,3 +11,8 @@ spring:
       ddl-auto: create-drop
   flyway:
     enabled: false
+
+app:
+  outbox:
+    sender:
+      delay: 10000000

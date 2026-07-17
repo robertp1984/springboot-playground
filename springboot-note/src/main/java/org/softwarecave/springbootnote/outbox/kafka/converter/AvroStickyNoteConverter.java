@@ -1,14 +1,17 @@
-package org.softwarecave.springbootnote.notification.kafka.converter;
+package org.softwarecave.springbootnote.outbox.kafka.converter;
 
 import lombok.extern.slf4j.Slf4j;
 import org.softwarecave.springbootnote.note.model.StickyNote;
 import org.softwarecave.springbootnote.tag.model.Tag;
+import org.springframework.stereotype.Component;
 
 import java.time.ZoneOffset;
 import java.util.List;
 
+@Component
 @Slf4j
 public class AvroStickyNoteConverter {
+
     public org.softwarecave.springbootnote.avro.StickyNote convertToAvro(StickyNote value) {
         var linksAvro = convertLinksToAvro(value);
         var tagsAvro = convertTagsToAvro(value);
