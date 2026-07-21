@@ -2,8 +2,6 @@
 
 A comprehensive multi-module Spring Boot application demonstrating modern microservices architecture, event-driven processing, and AI-powered categorization using cutting-edge technologies.
 
-**Copyright (C) 2025-2026 Robert Piasecki**
-
 ## Overview
 
 SpringBoot Playground is a multi-module Maven project that showcases a note-taking application with automatic categorization capabilities using keywords or AI (either OpenAI or AWS Bedrock). The project demonstrates real-world patterns including:
