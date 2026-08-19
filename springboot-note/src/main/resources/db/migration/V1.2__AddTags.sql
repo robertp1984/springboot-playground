@@ -21,36 +21,35 @@ CREATE INDEX sticky_note_tag_tag_id_idx ON sticky_note_tag(tag_id);
 
 -----
 
-CREATE OR REPLACE FUNCTION add_tag(name VARCHAR, description VARCHAR) RETURNS BIGINT AS $$
+CREATE OR REPLACE PROCEDURE add_tag(name VARCHAR, description VARCHAR) AS $$
     DECLARE
     BEGIN
         INSERT INTO tag(id, name, description) VALUES(nextval('tag_seq'), name, description);
-        RETURN currval('tag_seq');
         END;
 $$ LANGUAGE plpgsql;
 
-SELECT add_tag('Git', 'Git version control system');
-SELECT add_tag('Spring Boot', 'Spring Boot framework');
-SELECT add_tag('Docker', 'Docker containerization platform');
-SELECT add_tag('Kubernetes', 'Kubernetes container orchestration platform');
-SELECT add_tag('AWS', 'Amazon Web Services cloud platform');
-SELECT add_tag('Azure', 'Microsoft Azure cloud platform');
-SELECT add_tag('GCP', 'Google Cloud Platform cloud platform');
-SELECT add_tag('Database', 'Databases');
-SELECT add_tag('Security', 'System security');
-SELECT add_tag('Testing', 'Testing');
-SELECT add_tag('Kafka', 'Kafka streaming platform');
+CALL add_tag('Git', 'Git version control system');
+CALL add_tag('Spring Boot', 'Spring Boot framework');
+CALL add_tag('Docker', 'Docker containerization platform');
+CALL add_tag('Kubernetes', 'Kubernetes container orchestration platform');
+CALL add_tag('AWS', 'Amazon Web Services cloud platform');
+CALL add_tag('Azure', 'Microsoft Azure cloud platform');
+CALL add_tag('GCP', 'Google Cloud Platform cloud platform');
+CALL add_tag('Database', 'Databases');
+CALL add_tag('Security', 'System security');
+CALL add_tag('Testing', 'Testing');
+CALL add_tag('Kafka', 'Kafka streaming platform');
 
 ---
 
-SELECT add_role('ROLE_TAGS_VIEWER');
-SELECT add_role('ROLE_TAGS_ADMIN');
-SELECT add_role('ROLE_TAGS_MANAGER');
+CALL add_role('ROLE_TAGS_VIEWER');
+CALL add_role('ROLE_TAGS_ADMIN');
+CALL add_role('ROLE_TAGS_MANAGER');
 
-SELECT add_user_role('emma', 'ROLE_TAGS_VIEWER');
-SELECT add_user_role('ryan', 'ROLE_TAGS_VIEWER');
-SELECT add_user_role('ryan', 'ROLE_TAGS_MANAGER');
-SELECT add_user_role('bruce', 'ROLE_TAGS_VIEWER');
-SELECT add_user_role('zooey', 'ROLE_TAGS_VIEWER');
-SELECT add_user_role('zooey', 'ROLE_TAGS_MANAGER');
-SELECT add_user_role('zooey', 'ROLE_TAGS_ADMIN');
+CALL add_user_role('emma', 'ROLE_TAGS_VIEWER');
+CALL add_user_role('ryan', 'ROLE_TAGS_VIEWER');
+CALL add_user_role('ryan', 'ROLE_TAGS_MANAGER');
+CALL add_user_role('bruce', 'ROLE_TAGS_VIEWER');
+CALL add_user_role('zooey', 'ROLE_TAGS_VIEWER');
+CALL add_user_role('zooey', 'ROLE_TAGS_MANAGER');
+CALL add_user_role('zooey', 'ROLE_TAGS_ADMIN');
