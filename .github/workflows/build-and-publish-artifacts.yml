@@ -58,7 +58,7 @@ jobs:
         uses: docker/build-push-action@v7.3.0
         with:
           context: ./springboot-note
-          file: ./Dockerfile
+          file: ./springboot-note/Dockerfile
           push: true
           tags: ${{ steps.meta-note.outputs.tags }}
           labels: ${{ steps.meta-note.outputs.labels }}
