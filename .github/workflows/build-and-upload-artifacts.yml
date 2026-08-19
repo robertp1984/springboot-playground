@@ -50,7 +50,7 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN }}
       - name: Extract metadata (tags, labels) for Docker
         id: meta-note
-        uses: docker/metadata-action@v.6.2.0
+        uses: docker/metadata-action@v6.2.0
         with:
           images: robertp22/springboot-note
       - name: Build and push Docker image
