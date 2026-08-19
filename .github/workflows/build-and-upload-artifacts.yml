@@ -29,6 +29,7 @@ jobs:
         if: success() || failure() # always run even if the previous step fails
         with:
           report_paths: '**/target/surefire-reports/TEST-*.xml'
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v7
         with:
@@ -36,7 +37,35 @@ jobs:
           path: |
             **/target/*.jar
             **/target/*.war
+      
       - name: Publish to GitHub Packages
         run: mvn deploy -DskipTests
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v4.6.0
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta-note
+        uses: docker/metadata-action@v.6.2.0
+        with:
+          images: robertp22/springboot-note
+      - name: Build and push Docker image
+        id: push-note
+        uses: docker/build-push-action@v7.3.0
+        with:
+          context: ./springboot-note
+          file: ./Dockerfile
+          push: true
+          tags: ${{ steps.meta-note.outputs.tags }}
+          labels: ${{ steps.meta-note.outputs.labels }}
+      - name: Generate artifact attestation
+        uses: actions/attest@v4
+        with:
+          subject-name: index.docker.io/robertp22/springboot-note
+          subject-digest: ${{ steps.push-note.outputs.digest }}
+          push-to-registry: true
+
